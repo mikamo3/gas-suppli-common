@@ -1,0 +1,66 @@
+{
+  "name": "gas-suppli-common",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/mikamo3/gas-suppli-common",
+  "author": "mikamo3 <kamo3proj@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --fix src/**/*.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cover": "jest --coverage",
+    "build": "webpack",
+    "build:watch": "webpack --watch",
+    "push": "yarn run build && clasp push"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.3.0",
+    "@types/google-apps-script": "1.0.9",
+    "@types/jest": "24.9.0",
+    "@typescript-eslint/eslint-plugin": "2.16.0",
+    "@typescript-eslint/parser": "2.16.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "cpx": "1.5.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.9.0",
+    "eslint-import-resolver-webpack": "^0.12.1",
+    "eslint-plugin-prettier": "3.1.2",
+    "gas-webpack-plugin": "1.0.2",
+    "jest": "24.9.0",
+    "prettier": "1.19.1",
+    "rimraf": "3.0.0",
+    "ts-jest": "24.3.0",
+    "ts-loader": "6.2.1",
+    "typescript": "3.7.5",
+    "webpack": "4.41.5",
+    "webpack-cli": "3.3.10"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "((src|__tests__)/.+(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "moduleNameMapper": {
+      "src/(.*)$": "<rootDir>/src/$1",
+      "mocks/(.*)$": "<rootDir>/__mocks__/$1"
+    },
+    "globals": {
+      "SpreadsheetApp": {}
+    }
+  },
+  "dependencies": {
+    "@types/underscore": "^1.9.4",
+    "underscore": "^1.10.2"
+  }
+}
