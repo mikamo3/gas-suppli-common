@@ -4,12 +4,12 @@ const CopyPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-  mode: "production",
-  entry: "./src/index.ts",
+  mode: "development",
+  entry: "./__tests__/integrate/index.ts",
   devtool: false,
   output: {
-    filename: "index.js",
-    path: path.join(__dirname, "dist"),
+    filename: "bundle.js",
+    path: path.join(__dirname, "dist_test"),
   },
   module: {
     rules: [
@@ -28,5 +28,9 @@ module.exports = {
       repository: path.resolve(__dirname, "./src/repository"),
     },
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [
+    new GasPlugin(),
+    new CleanWebpackPlugin(),
+    new CopyPlugin([{ from: "./appsscript.json", to: "./" }]),
+  ],
 };
