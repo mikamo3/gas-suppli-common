@@ -1,8 +1,8 @@
 {
   "name": "gas-suppli-common",
   "version": "1.0.0",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/mikamo3/gas-suppli-common",
   "author": "mikamo3 <kamo3proj@gmail.com>",
   "license": "MIT",
