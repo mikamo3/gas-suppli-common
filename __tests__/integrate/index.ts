@@ -1,6 +1,7 @@
 import { deleteSpreadSheet, createSpreadSheet } from "./spreadsheet";
 import testMasterdata from "./test/testMasterdata";
 import testRelationType from "./test/testRelationType";
+import testUpdateIntakes from "./test/testUpdateIntakes";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let global: any;
@@ -25,5 +26,6 @@ global.runTest = () => {
   const spreadsheet = SpreadsheetApp.openById(testSpreadSheetId);
   testMasterdata(spreadsheet);
   testRelationType(spreadsheet);
+  testUpdateIntakes(spreadsheet);
   Logger.log("ok");
 };

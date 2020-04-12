@@ -1,7 +1,7 @@
 import MockRange from "./MockRange";
 
 export default class MockSheet
-  implements Partial<{ [P in keyof GoogleAppsScript.Spreadsheet.Sheet]: any }> {
+  implements Partial<{ [P in keyof GoogleAppsScript.Spreadsheet.Sheet]: unknown }> {
   private lastRow: number;
   private values: Array<Array<string | number>>;
   constructor(values: Array<Array<string | number>>) {
