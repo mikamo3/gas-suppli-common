@@ -1,19 +1,23 @@
-import { Datastore } from "./Datastore";
-import { IMakerValues } from "src/model/Maker";
 import { filter } from "underscore";
-import { IIntakeValues } from "src/model/Intake";
-import { ISuppliValues } from "src/model/Suppli";
-import { ISuppliAmountValues } from "src/model/SuppliAmount";
-import { ITimingValues } from "src/model/Timing";
-import { ITypeValues } from "src/model/Type";
+import { Datastore } from "./Datastore";
+import {
+  IMakerValues,
+  IIntakeValues,
+  ISuppliValues,
+  ISuppliAmountValues,
+  ITimingValues,
+  ITypeValues
+} from "model/index";
 
 type IColumPosition = { [s: string]: number };
 type IRowValues = Array<string | number>;
 type IHeaderColums = Array<string>;
 type ISheetValues = Array<IRowValues>;
 export class SpreadSheetDatastore implements Datastore {
+  private sheetValues: { [s: string]: ISheetValues };
   private spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
   constructor(configure: { spreadSheetId: string }) {
+    this.sheetValues = {};
     this.spreadSheet = SpreadsheetApp.openById(configure.spreadSheetId);
   }
   fetchMaker() {
@@ -35,15 +39,18 @@ export class SpreadSheetDatastore implements Datastore {
     return this.fetch<ITypeValues>("type");
   }
   private fetch<T>(sheetName: string) {
-    const sheetValues = this.spreadSheet
-      .getSheetByName(sheetName)
-      .getDataRange()
-      .getValues() as ISheetValues;
-    if (sheetValues.length === 0) {
+    if (!(sheetName in this.sheetValues)) {
+      const sheetValues = this.spreadSheet
+        .getSheetByName(sheetName)
+        .getDataRange()
+        .getValues() as ISheetValues;
+      this.sheetValues[sheetName] = sheetValues;
+    }
+    if (this.sheetValues[sheetName].length === 0) {
       return [];
     }
-    const dataPosition = this.getDataPosition(sheetValues);
-    return this.convertModelValues<T>(dataPosition, sheetValues);
+    const dataPosition = this.getDataPosition(this.sheetValues[sheetName]);
+    return this.convertModelValues<T>(dataPosition, this.sheetValues[sheetName]);
   }
   private getDataPosition(sheetValues: ISheetValues): IColumPosition {
     const header = sheetValues[0] as IHeaderColums;

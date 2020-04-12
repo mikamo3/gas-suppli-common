@@ -22,8 +22,10 @@ module.exports = {
   resolve: {
     extensions: [".ts"],
     alias: {
-      src: path.resolve(__dirname, "/src"),
-      mocks: path.resolve(__dirname, "/__mocks__"),
+      model: path.resolve(__dirname, "./src/model"),
+      mocks: path.resolve(__dirname, "./__mocks__"),
+      datastore: path.resolve(__dirname, "./src/datastore"),
+      repository: path.resolve(__dirname, "./src/repository"),
     },
   },
   plugins: [

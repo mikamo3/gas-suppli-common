@@ -13,15 +13,22 @@ import MockedDatastore, {
   setFetchTimingReturnValue,
   setFetchTypeReturnValue
 } from "mocks/datastore/MockDatastore";
-import { Datastore } from "src/datastore/Datastore";
-import { Intake, IIntakeValues } from "src/model/Intake";
-import { Maker, IMakerValues } from "src/model/Maker";
-import { Suppli, ISuppliValues } from "src/model/Suppli";
-import { SuppliAmount, ISuppliAmountValues } from "src/model/SuppliAmount";
-import { Timing, ITimingValues } from "src/model/Timing";
-import { Type, ITypeValues } from "src/model/Type";
-import MasterRepository from "src/repository/MasterRepository";
-
+import { Datastore } from "datastore/Datastore";
+import {
+  Intake,
+  IIntakeValues,
+  ITypeValues,
+  Type,
+  ISuppliValues,
+  Suppli,
+  IMakerValues,
+  ISuppliAmountValues,
+  Maker,
+  SuppliAmount,
+  ITimingValues,
+  Timing
+} from "model/index";
+import { MasterRepository } from "repository/index";
 let masterRepository: MasterRepository;
 let datastore: Datastore;
 
@@ -74,23 +81,46 @@ describe("getTypes", () => {
       createType(2, "type2"),
       createType(3, "type3")
     ];
-    const fetchSuppliReturnValue: ISuppliValues[] = [
-      createSuppli(100, 1),
-      createSuppli(101, 1),
-      createSuppli(102, 3)
-    ];
     beforeAll(() => {
       setFetchTypeReturnValue(fetchTypeReturnValue);
-      setFetchSuppliReturnValue(fetchSuppliReturnValue);
     });
+    describe("supplis", () => {
+      const fetchSuppliReturnValue: ISuppliValues[] = [
+        createSuppli(100, 1),
+        createSuppli(101, 1),
+        createSuppli(102, 3)
+      ];
+      beforeAll(() => {
+        setFetchSuppliReturnValue(fetchSuppliReturnValue);
+      });
 
-    it("Suppliが存在する場合はそれが返却されること", () => {
-      expect(actual[0].supplis).toHaveLength(2);
-      expect(actual[0].supplis[0].id).toEqual(100);
-      expect(actual[0].supplis[1].id).toEqual(101);
+      it("Suppliが存在する場合はそれが返却されること", () => {
+        expect(actual[0].supplis).toHaveLength(2);
+        expect(actual[0].supplis[0].id).toEqual(100);
+        expect(actual[0].supplis[1].id).toEqual(101);
+      });
+      it("Suppliが存在しない場合は空配列が返却されること", () => {
+        expect(actual[1].supplis).toMatchObject([]);
+      });
     });
-    it("Suppliが存在しない場合は空配列が返却されること", () => {
-      expect(actual[1].supplis).toMatchObject([]);
+    describe("intakes", () => {
+      const fetchIntakeReturnValue: IIntakeValues[] = [
+        createIntake(10, 10, 1, 5),
+        createIntake(11, 11, 1, 6),
+        createIntake(12, 12, 3, 7)
+      ];
+      beforeAll(() => {
+        setFetchIntakeReturnValue(fetchIntakeReturnValue);
+      });
+
+      it("Intakeが存在する場合はそれが返却されること", () => {
+        expect(actual[0].intakes).toHaveLength(2);
+        expect(actual[0].intakes[0].id).toEqual(10);
+        expect(actual[0].intakes[1].id).toEqual(11);
+      });
+      it("Suppliが存在しない場合は空配列が返却されること", () => {
+        expect(actual[1].intakes).toMatchObject([]);
+      });
     });
   });
 });

@@ -43,6 +43,10 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "((src|__tests__)/.+(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/__tests__/integrate"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -52,8 +56,10 @@
       "node"
     ],
     "moduleNameMapper": {
-      "src/(.*)$": "<rootDir>/src/$1",
-      "mocks/(.*)$": "<rootDir>/__mocks__/$1"
+      "model/(.*)$": "<rootDir>/src/model/$1",
+      "mocks/(.*)$": "<rootDir>/__mocks__/$1",
+      "datastore/(.*)$": "<rootDir>/src/datastore/$1",
+      "repository/(.*)$": "<rootDir>/src/repository/$1"
     },
     "globals": {
       "SpreadsheetApp": {}

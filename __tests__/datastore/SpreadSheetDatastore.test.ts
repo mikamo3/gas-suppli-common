@@ -1,13 +1,15 @@
-import { SpreadSheetDatastore } from "src/datastore/SpreadSheetDatastore";
+import { SpreadSheetDatastore } from "datastore/index";
 import MockSheet from "mocks/gas/MockSheet";
 import MockRange from "mocks/gas/MockRange";
+import {
+  IMakerValues,
+  IIntakeValues,
+  ISuppliValues,
+  ISuppliAmountValues,
+  ITimingValues,
+  ITypeValues
+} from "model/index";
 
-import { IMakerValues } from "src/model/Maker";
-import { IIntakeValues } from "src/model/Intake";
-import { ISuppliValues } from "src/model/Suppli";
-import { ISuppliAmountValues } from "src/model/SuppliAmount";
-import { ITimingValues } from "src/model/Timing";
-import { ITypeValues } from "src/model/Type";
 const openById = jest.fn();
 let spreadSheetValues: Array<Array<string | number>>;
 let spreadSheetDatastore: SpreadSheetDatastore;
@@ -34,6 +36,37 @@ describe("スプレッドシートの操作確認", () => {
   });
   it("指定したIDのスプレッドシートが開かれること", () => {
     expect(openById).toBeCalledWith("hoge");
+  });
+});
+describe("キャッシュの確認", () => {
+  const sheetValues: Array<Array<string | number>> = [
+    ["id", "name"],
+    [1, "maker1"],
+    [2, "maker2"]
+  ];
+  beforeAll(() => {
+    spreadSheetValues = sheetValues;
+  });
+  beforeEach(() => {
+    spreadSheetDatastore.fetchMaker();
+    spreadSheetDatastore.fetchMaker();
+  });
+  it("spreadSheetのAPIが1度のみよばれること", () => {
+    expect(MockSheet.prototype.getSheetByName).toBeCalledTimes(1);
+    expect(MockSheet.prototype.getDataRange).toBeCalledTimes(1);
+    expect(MockRange.prototype.getValues).toBeCalledTimes(1);
+  });
+});
+describe("取得結果が存在しない場合", () => {
+  let actual: ReturnType<typeof spreadSheetDatastore.fetchMaker>;
+  beforeAll(() => {
+    spreadSheetValues = [];
+  });
+  beforeEach(() => {
+    actual = spreadSheetDatastore.fetchMaker();
+  });
+  it("空配列が返却されること", () => {
+    expect(actual).toEqual([]);
   });
 });
 describe("fetchMaker", () => {

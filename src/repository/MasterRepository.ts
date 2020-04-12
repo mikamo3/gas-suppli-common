@@ -1,12 +1,20 @@
-import { Datastore } from "src/datastore/Datastore";
+import { Datastore } from "datastore/Datastore";
 import { filter, find } from "underscore";
-import { Type, ITypeValues } from "src/model/Type";
-import { Suppli, ISuppliValues } from "src/model/Suppli";
-import { Maker, IMakerValues } from "src/model/Maker";
-import { SuppliAmount, ISuppliAmountValues } from "src/model/SuppliAmount";
-import { Timing, ITimingValues } from "src/model/Timing";
-import { Intake, IIntakeValues } from "src/model/Intake";
-export default class MasterRepository {
+import {
+  Type,
+  Suppli,
+  Maker,
+  SuppliAmount,
+  Timing,
+  Intake,
+  IMakerValues,
+  ISuppliValues,
+  ISuppliAmountValues,
+  IIntakeValues,
+  ITimingValues,
+  ITypeValues
+} from "model/index";
+export class MasterRepository {
   datastore: Datastore;
   constructor(datastore: Datastore) {
     this.datastore = datastore;
@@ -89,13 +97,21 @@ export default class MasterRepository {
     const intakes = this.datastore.fetchIntake();
     return intakes.map<Intake>(i => this.createIntake(i));
   }
+  getIntakesByTypeId(typeId: number) {
+    const intakes = this.datastore.fetchIntake();
+    return filter(intakes, i => i.typeId === typeId).map<Intake>(i => this.createIntake(i));
+  }
   getIntakesByTimingId(timingId: number) {
     const intakes = this.datastore.fetchIntake();
     return filter(intakes, i => i.timingId === timingId).map<Intake>(i => this.createIntake(i));
   }
 
   private createType(type: ITypeValues) {
-    return new Type(type, () => this.getSupplisByTypeId(type.id));
+    return new Type(
+      type,
+      () => this.getSupplisByTypeId(type.id),
+      () => this.getIntakesByTypeId(type.id)
+    );
   }
   private createSuppli(suppli: ISuppliValues) {
     return new Suppli(

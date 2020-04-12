@@ -2,13 +2,16 @@
   "compilerOptions": {
     "sourceMap": true,
     "target": "es5",
-    "module": "es2015",
+    "module": "commonjs",
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "src/*": ["src/*"],
+      "model/*": ["src/model/*"],
+      "datastore/*": ["src/datastore/*"],
+      "repository/*": ["src/repository/*"],
       "mocks/*": ["__mocks__/*"]
     },
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "skipLibCheck": true
   }
 }
