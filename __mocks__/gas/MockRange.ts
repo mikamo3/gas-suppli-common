@@ -9,5 +9,10 @@ export default class MockRange
   getValues() {
     return this.values;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setValues(values: Array<Array<string | number>>) {
+    //donothing
+  }
 }
 jest.spyOn(MockRange.prototype, "getValues");
+jest.spyOn(MockRange.prototype, "setValues");

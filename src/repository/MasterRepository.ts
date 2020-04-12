@@ -106,6 +106,16 @@ export class MasterRepository {
     return filter(intakes, i => i.timingId === timingId).map<Intake>(i => this.createIntake(i));
   }
 
+  updateIntakes(intakes: Intake[]) {
+    const intakeValues = intakes.map<IIntakeValues>(i => ({
+      id: i.id,
+      serving: i.serving,
+      timingId: i.timingId,
+      typeId: i.typeId
+    }));
+    this.datastore.updateIntakes(intakeValues);
+  }
+
   private createType(type: ITypeValues) {
     return new Type(
       type,

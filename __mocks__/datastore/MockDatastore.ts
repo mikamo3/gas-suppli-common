@@ -12,6 +12,7 @@ export const fetchMaker = jest.fn<IMakerValues[], []>();
 export const fetchSuppliAmount = jest.fn<ISuppliAmountValues[], []>();
 export const fetchTiming = jest.fn<ITimingValues[], []>();
 export const fetchIntake = jest.fn<IIntakeValues[], []>();
+export const updateIntakes = jest.fn();
 
 let fetchSuppliReturnValue: ISuppliValues[] = [];
 let fetchTypeReturnValue: ITypeValues[] = [];
@@ -26,7 +27,8 @@ const mockedDatastore = jest.fn<Datastore, []>().mockImplementation(() => ({
   fetchMaker,
   fetchSuppliAmount,
   fetchTiming,
-  fetchIntake
+  fetchIntake,
+  updateIntakes
 }));
 
 export const setFetchSuppliReturnValue = (value: ISuppliValues[]) => {

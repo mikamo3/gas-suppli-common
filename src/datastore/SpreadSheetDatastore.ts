@@ -13,6 +13,13 @@ type IColumPosition = { [s: string]: number };
 type IRowValues = Array<string | number>;
 type IHeaderColums = Array<string>;
 type ISheetValues = Array<IRowValues>;
+const intakeColumnPosition: { [s in keyof IIntakeValues]: number } = {
+  id: 0,
+  timingId: 1,
+  typeId: 2,
+  serving: 3
+};
+
 export class SpreadSheetDatastore implements Datastore {
   private sheetValues: { [s: string]: ISheetValues };
   private spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
@@ -68,5 +75,23 @@ export class SpreadSheetDatastore implements Datastore {
       }
       return obj;
     }, []);
+  }
+  updateIntakes(intakes: IIntakeValues[]) {
+    delete this.sheetValues["intake"];
+    const sheet = this.spreadSheet.getSheetByName("intake");
+    const lastRow = sheet.getLastRow();
+    sheet.deleteRows(2, lastRow - 1);
+    if (intakes.length !== 0) {
+      const intakeArray = intakes.map<IRowValues>(i => {
+        const intakeRow = [];
+        for (const position in intakeColumnPosition) {
+          intakeRow[intakeColumnPosition[position]] = i[position];
+        }
+        return intakeRow;
+      });
+      sheet.insertRowsAfter(1, intakes.length);
+      const range = sheet.getRange(2, 1, intakeArray.length, intakeArray[0].length);
+      range.setValues(intakeArray);
+    }
   }
 }

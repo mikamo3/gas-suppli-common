@@ -11,7 +11,8 @@ import MockedDatastore, {
   setFetchSuppliAmountReturnValue,
   setFetchSuppliReturnValue,
   setFetchTimingReturnValue,
-  setFetchTypeReturnValue
+  setFetchTypeReturnValue,
+  updateIntakes
 } from "mocks/datastore/MockDatastore";
 import { Datastore } from "datastore/Datastore";
 import {
@@ -428,6 +429,44 @@ describe("getIntakes", () => {
       it("Timingが存在しない場合は空配列が返却されること", () => {
         expect(actual[0].type).toBeUndefined();
       });
+    });
+  });
+});
+describe("updateIntakes", () => {
+  let intakes: Intake[];
+  beforeEach(() => {
+    masterRepository.updateIntakes(intakes);
+  });
+  describe("空の配列が渡されたとき", () => {
+    beforeAll(() => {
+      intakes = [];
+    });
+    it("datastore.updateIntakesが空の配列で呼び出されること", () => {
+      expect(updateIntakes).toBeCalledWith([]);
+    });
+  });
+  describe("複数のIntakeが指定されたとき", () => {
+    const intakeValues: IIntakeValues[] = [
+      { id: 1, timingId: 10, typeId: 100, serving: 5 },
+      { id: 2, timingId: 11, typeId: 101, serving: 6 }
+    ];
+    beforeAll(() => {
+      intakes = [
+        new Intake(
+          intakeValues[0],
+          () => masterRepository.getTimingById(1),
+          () => masterRepository.getTypeById(1)
+        ),
+        new Intake(
+          intakeValues[1],
+          () => masterRepository.getTimingById(1),
+          () => masterRepository.getTypeById(1)
+        )
+      ];
+    });
+    it("datastore.updateIntakesが期待したパラメータで呼び出されること", () => {
+      const expected = intakeValues;
+      expect(updateIntakes).toBeCalledWith(expected);
     });
   });
 });

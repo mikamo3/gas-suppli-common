@@ -9,7 +9,9 @@ import {
   ITimingValues,
   ITypeValues
 } from "model/index";
-
+import MockSpreadSheet from "mocks/gas/MockSpreadSheet";
+import { mocked } from "ts-jest/utils";
+import { createIntake } from "mocks/datastore/MockDatastore";
 const openById = jest.fn();
 let spreadSheetValues: Array<Array<string | number>>;
 let spreadSheetDatastore: SpreadSheetDatastore;
@@ -21,7 +23,7 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  openById.mockReturnValue(new MockSheet(spreadSheetValues));
+  openById.mockReturnValue(new MockSpreadSheet(spreadSheetValues));
   spreadSheetDatastore = new SpreadSheetDatastore(configure);
 });
 afterEach(() => {
@@ -52,7 +54,7 @@ describe("キャッシュの確認", () => {
     spreadSheetDatastore.fetchMaker();
   });
   it("spreadSheetのAPIが1度のみよばれること", () => {
-    expect(MockSheet.prototype.getSheetByName).toBeCalledTimes(1);
+    expect(MockSpreadSheet.prototype.getSheetByName).toBeCalledTimes(1);
     expect(MockSheet.prototype.getDataRange).toBeCalledTimes(1);
     expect(MockRange.prototype.getValues).toBeCalledTimes(1);
   });
@@ -87,7 +89,7 @@ describe("fetchMaker", () => {
     expect(openById).toBeCalledWith("hogehoge");
   });
   it("makerシートが選択されること", () => {
-    expect(MockSheet.prototype.getSheetByName).toBeCalledWith("maker");
+    expect(MockSpreadSheet.prototype.getSheetByName).toBeCalledWith("maker");
   });
   it("シート内のすべてのデータが選択されること", () => {
     expect(MockSheet.prototype.getDataRange).toBeCalled();
@@ -123,7 +125,7 @@ describe("fetchIntake", () => {
     expect(openById).toBeCalledWith("hogehoge");
   });
   it("intakeシートが選択されること", () => {
-    expect(MockSheet.prototype.getSheetByName).toBeCalledWith("intake");
+    expect(MockSpreadSheet.prototype.getSheetByName).toBeCalledWith("intake");
   });
   it("シート内のすべてのデータが選択されること", () => {
     expect(MockSheet.prototype.getDataRange).toBeCalled();
@@ -160,7 +162,7 @@ describe("fetchSuppli", () => {
     expect(openById).toBeCalledWith("hogehoge");
   });
   it("suppliシートが選択されること", () => {
-    expect(MockSheet.prototype.getSheetByName).toBeCalledWith("suppli");
+    expect(MockSpreadSheet.prototype.getSheetByName).toBeCalledWith("suppli");
   });
   it("シート内のすべてのデータが選択されること", () => {
     expect(MockSheet.prototype.getDataRange).toBeCalled();
@@ -218,7 +220,7 @@ describe("fetchSuppliAmount", () => {
     expect(openById).toBeCalledWith("hogehoge");
   });
   it("suppliAmountシートが選択されること", () => {
-    expect(MockSheet.prototype.getSheetByName).toBeCalledWith("suppliAmount");
+    expect(MockSpreadSheet.prototype.getSheetByName).toBeCalledWith("suppliAmount");
   });
   it("シート内のすべてのデータが選択されること", () => {
     expect(MockSheet.prototype.getDataRange).toBeCalled();
@@ -254,7 +256,7 @@ describe("fetchTiming", () => {
     expect(openById).toBeCalledWith("hogehoge");
   });
   it("timingシートが選択されること", () => {
-    expect(MockSheet.prototype.getSheetByName).toBeCalledWith("timing");
+    expect(MockSpreadSheet.prototype.getSheetByName).toBeCalledWith("timing");
   });
   it("シート内のすべてのデータが選択されること", () => {
     expect(MockSheet.prototype.getDataRange).toBeCalled();
@@ -289,7 +291,7 @@ describe("fetchType", () => {
     expect(openById).toBeCalledWith("hogehoge");
   });
   it("typeシートが選択されること", () => {
-    expect(MockSheet.prototype.getSheetByName).toBeCalledWith("type");
+    expect(MockSpreadSheet.prototype.getSheetByName).toBeCalledWith("type");
   });
   it("シート内のすべてのデータが選択されること", () => {
     expect(MockSheet.prototype.getDataRange).toBeCalled();
@@ -303,5 +305,61 @@ describe("fetchType", () => {
       { id: 2, name: "type2" }
     ];
     expect(actual).toEqual(expected);
+  });
+});
+describe("updateIntakes", () => {
+  let intakes: IIntakeValues[];
+  const lastRow = 10;
+  beforeAll(() => {
+    intakes = [];
+  });
+  beforeEach(() => {
+    mocked(MockSheet.prototype.getLastRow).mockReturnValue(lastRow);
+    spreadSheetDatastore.fetchIntake();
+    spreadSheetDatastore.updateIntakes(intakes);
+  });
+  it("intakeシートが選択されること", () => {
+    expect(MockSpreadSheet.prototype.getSheetByName).toBeCalledWith("intake");
+  });
+  it("データが存在する末尾の行が取得されること", () => {
+    expect(MockSheet.prototype.getLastRow).toBeCalled();
+  });
+  it("2行目以降のデータの行が削除されること", () => {
+    expect(MockSheet.prototype.deleteRows).toBeCalledWith(2, 9);
+  });
+  describe("実行後のfetchIntakeを実行した際", () => {
+    beforeEach(() => {
+      spreadSheetDatastore.fetchIntake();
+    });
+    it("キャッシュが使われないこと", () => {
+      expect(MockRange.prototype.getValues).toBeCalledTimes(2);
+    });
+  });
+  describe("空配列が指定された場合", () => {
+    beforeAll(() => {
+      intakes = [];
+    });
+    it("データの追加が行われないこと", () => {
+      expect(MockSheet.prototype.insertRowsAfter).not.toBeCalled();
+    });
+  });
+  describe("任意の値が指定された場合", () => {
+    beforeAll(() => {
+      intakes = [
+        createIntake(1, 10, 30, 5),
+        createIntake(2, 11, 31, 6),
+        createIntake(3, 12, 32, 7)
+      ];
+    });
+    it("件数分2行目以降にデータが追加されること", () => {
+      const expected = [
+        [1, 10, 30, 5],
+        [2, 11, 31, 6],
+        [3, 12, 32, 7]
+      ];
+      expect(MockSheet.prototype.insertRowsAfter).toBeCalledWith(1, 3);
+      expect(MockSheet.prototype.getRange).toBeCalledWith(2, 1, 3, 4);
+      expect(MockRange.prototype.setValues).toBeCalledWith(expected);
+    });
   });
 });

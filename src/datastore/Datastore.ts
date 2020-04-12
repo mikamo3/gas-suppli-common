@@ -14,4 +14,5 @@ export interface Datastore {
   fetchMaker: () => IMakerValues[];
   fetchTiming: () => ITimingValues[];
   fetchIntake: () => IIntakeValues[];
+  updateIntakes: (intakes: IIntakeValues[]) => void;
 }
