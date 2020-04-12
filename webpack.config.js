@@ -9,7 +9,7 @@ module.exports = {
   devtool: false,
   output: {
     filename: "bundle.js",
-    path: path.join(__dirname, "dist"),
+    path: path.join(__dirname, "dist_test"),
   },
   module: {
     rules: [

@@ -23,8 +23,10 @@
     "prettier/prettier": [
       "error",
       {
+        "trailingComma": "none",
         "semi": true,
-        "printWidth": 100
+        "printWidth": 100,
+        "arrowParens": "avoid"
       }
     ]
   }

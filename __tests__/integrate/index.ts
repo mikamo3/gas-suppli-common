@@ -16,13 +16,18 @@ global.prepare = () => {
     PropertiesService.getScriptProperties().setProperty("testSpreadSheetId", "");
   }
   const spreadsheetId = createSpreadSheet(spreadSheetName, testFolderId);
+  if (!spreadsheetId) {
+    throw new Error("createFailed");
+  }
   PropertiesService.getScriptProperties().setProperty("testSpreadSheetId", spreadsheetId);
 };
 global.runTest = () => {
   const testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(
     "testSpreadSheetId"
   );
-
+  if (!testSpreadSheetId) {
+    throw new Error("spreadSheet does not exist");
+  }
   const spreadsheet = SpreadsheetApp.openById(testSpreadSheetId);
   testMasterdata(spreadsheet);
   testRelationType(spreadsheet);
