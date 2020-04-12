@@ -1,12 +1,16 @@
 {
   "name": "gas-suppli-common",
   "dockerFile": "Dockerfile",
-  "extensions": [
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint"
-  ],
+  "extensions": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
   "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "[typescript]": {
+      "editor.formatOnSave": false,
+      "editor.tabSize": 2
+    }
   },
   "remoteUser": "dev",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
