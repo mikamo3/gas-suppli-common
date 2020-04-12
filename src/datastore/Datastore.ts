@@ -5,7 +5,7 @@ import {
   IMakerValues,
   ITimingValues,
   IIntakeValues
-} from "model/index";
+} from "../model/index";
 
 export interface Datastore {
   fetchType: () => ITypeValues[];
@@ -16,4 +16,3 @@ export interface Datastore {
   fetchIntake: () => IIntakeValues[];
   updateIntakes: (intakes: IIntakeValues[]) => void;
 }
-  

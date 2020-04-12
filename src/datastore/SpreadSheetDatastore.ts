@@ -7,7 +7,7 @@ import {
   ISuppliAmountValues,
   ITimingValues,
   ITypeValues
-} from "model/index";
+} from "../model";
 
 type IColumPosition = { [s: string]: number };
 type IRowValues = Array<string | number>;

@@ -1,5 +1,5 @@
 import { Datastore } from "./Datastore";
-import { IIntakeValues } from "model/index";
+import { IIntakeValues } from "../model";
 export declare class SpreadSheetDatastore implements Datastore {
     private sheetValues;
     private spreadSheet;
@@ -7,8 +7,8 @@ export declare class SpreadSheetDatastore implements Datastore {
         spreadSheetId: string;
     });
     fetchMaker(): Pick<import("../model").Maker, "id" | "name">[];
-    fetchIntake(): Pick<import("../model").Intake, "id" | "serving" | "timingId" | "typeId">[];
-    fetchSuppli(): Pick<import("../model").Suppli, "id" | "name" | "typeId" | "makerId" | "amountPerServing" | "servingUnit">[];
+    fetchIntake(): Pick<import("../model").Intake, "id" | "typeId" | "serving" | "timingId">[];
+    fetchSuppli(): Pick<import("../model").Suppli, "id" | "name" | "makerId" | "typeId" | "amountPerServing" | "servingUnit">[];
     fetchSuppliAmount(): Pick<import("../model").SuppliAmount, "id" | "amount" | "suppliId">[];
     fetchTiming(): Pick<import("../model").Timing, "id" | "name">[];
     fetchType(): Pick<import("../model").Type, "id" | "name">[];

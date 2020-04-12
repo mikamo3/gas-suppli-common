@@ -1,5 +1,5 @@
-import { Datastore } from "datastore/Datastore";
-import { Type, Suppli, Maker, SuppliAmount, Timing, Intake } from "model/index";
+import { Datastore } from "../datastore/Datastore";
+import { Type, Suppli, Maker, SuppliAmount, Timing, Intake } from "../model/index";
 export declare class MasterRepository {
     datastore: Datastore;
     constructor(datastore: Datastore);

@@ -1,4 +1,4 @@
-import { ITypeValues, ISuppliValues, ISuppliAmountValues, IMakerValues, ITimingValues, IIntakeValues } from "model/index";
+import { ITypeValues, ISuppliValues, ISuppliAmountValues, IMakerValues, ITimingValues, IIntakeValues } from "../model/index";
 export interface Datastore {
     fetchType: () => ITypeValues[];
     fetchSuppli: () => ISuppliValues[];

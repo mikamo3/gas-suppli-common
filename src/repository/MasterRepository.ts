@@ -1,4 +1,4 @@
-import { Datastore } from "datastore/Datastore";
+import { Datastore } from "../datastore/Datastore";
 import { filter, find } from "underscore";
 import {
   Type,
@@ -13,7 +13,7 @@ import {
   IIntakeValues,
   ITimingValues,
   ITypeValues
-} from "model/index";
+} from "../model/index";
 export class MasterRepository {
   datastore: Datastore;
   constructor(datastore: Datastore) {
