@@ -16,3 +16,4 @@ export interface Datastore {
   fetchIntake: () => IIntakeValues[];
   updateIntakes: (intakes: IIntakeValues[]) => void;
 }
+  

@@ -1,0 +1,24 @@
+/// <reference types="jest" />
+import { Datastore } from "src/datastore/Datastore";
+export declare const fetchSuppli: jest.Mock<Pick<import("../../src/model/Suppli").Suppli, "id" | "name" | "makerId" | "typeId" | "amountPerServing" | "servingUnit">[], []>;
+export declare const fetchType: jest.Mock<Pick<import("../../src/model/Type").Type, "id" | "name">[], []>;
+export declare const fetchMaker: jest.Mock<Pick<import("../../src/model/Maker").Maker, "id" | "name">[], []>;
+export declare const fetchSuppliAmount: jest.Mock<Pick<import("../../src/model/SuppliAmount").SuppliAmount, "id" | "amount" | "suppliId">[], []>;
+export declare const fetchTiming: jest.Mock<Pick<import("../../src/model/Timing").Timing, "id" | "name">[], []>;
+export declare const fetchIntake: jest.Mock<Pick<import("../../src/model/Intake").Intake, "id" | "typeId" | "serving" | "timingId">[], []>;
+export declare const updateIntakes: jest.Mock<any, any>;
+declare const mockedDatastore: jest.Mock<Datastore, []>;
+export declare const setFetchSuppliReturnValue: (value: Pick<import("../../src/model/Suppli").Suppli, "id" | "name" | "makerId" | "typeId" | "amountPerServing" | "servingUnit">[]) => void;
+export declare const setFetchTypeReturnValue: (value: Pick<import("../../src/model/Type").Type, "id" | "name">[]) => void;
+export declare const setFetchMakerReturnValue: (value: Pick<import("../../src/model/Maker").Maker, "id" | "name">[]) => void;
+export declare const setFetchSuppliAmountReturnValue: (value: Pick<import("../../src/model/SuppliAmount").SuppliAmount, "id" | "amount" | "suppliId">[]) => void;
+export declare const setFetchTimingReturnValue: (value: Pick<import("../../src/model/Timing").Timing, "id" | "name">[]) => void;
+export declare const setFetchIntakeReturnValue: (value: Pick<import("../../src/model/Intake").Intake, "id" | "typeId" | "serving" | "timingId">[]) => void;
+export default mockedDatastore;
+export declare const createType: (id?: number, name?: string) => Pick<import("../../src/model/Type").Type, "id" | "name">;
+export declare const createSuppli: (id?: number, typeId?: number, makerId?: number, name?: string, amountPerServing?: number, servingUnit?: string) => Pick<import("../../src/model/Suppli").Suppli, "id" | "name" | "makerId" | "typeId" | "amountPerServing" | "servingUnit">;
+export declare const createSuppliAmount: (id?: number, suppliId?: number, amount?: number) => Pick<import("../../src/model/SuppliAmount").SuppliAmount, "id" | "amount" | "suppliId">;
+export declare const createMaker: (id?: number, name?: string) => Pick<import("../../src/model/Maker").Maker, "id" | "name">;
+export declare const createTiming: (id?: number, name?: string) => Pick<import("../../src/model/Timing").Timing, "id" | "name">;
+export declare const createIntake: (id?: number, timingId?: number, typeId?: number, serving?: number) => Pick<import("../../src/model/Intake").Intake, "id" | "typeId" | "serving" | "timingId">;
+export declare const init: () => void;

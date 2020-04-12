@@ -1,7 +1,8 @@
 {
   "name": "gas-suppli-common",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "repository": "https://github.com/mikamo3/gas-suppli-common",
   "author": "mikamo3 <kamo3proj@gmail.com>",
   "license": "MIT",
@@ -29,6 +30,7 @@
     "eslint-import-resolver-webpack": "^0.12.1",
     "eslint-plugin-prettier": "3.1.2",
     "gas-webpack-plugin": "1.0.2",
+    "husky": "^4.2.5",
     "jest": "25.3.0",
     "prettier": "2.0.4",
     "rimraf": "3.0.2",
@@ -68,5 +70,10 @@
   "dependencies": {
     "@types/underscore": "^1.9.4",
     "underscore": "^1.10.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc && git add dist"
+    }
   }
 }
