@@ -1,5 +1,5 @@
 import { filter } from "underscore";
-import { Datastore } from "./Datastore";
+import { Datastore, DatastoreConfig } from "./Datastore";
 import {
   IMakerValues,
   IIntakeValues,
@@ -20,11 +20,18 @@ const intakeColumnPosition: { [s in keyof IIntakeValues]: number } = {
   serving: 3
 };
 
+type SpreadSheetDatastoreConfig = {
+  spreadSheetId: string;
+} & DatastoreConfig;
+
 export class SpreadSheetDatastore implements Datastore {
   private sheetValues: { [s: string]: ISheetValues };
   private spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
-  constructor(configure: { spreadSheetId: string }) {
+  constructor(configure: SpreadSheetDatastoreConfig) {
     this.sheetValues = {};
+    if (!configure.spreadSheetId) {
+      throw Error("configure.spreadSheetId does not found");
+    }
     this.spreadSheet = SpreadsheetApp.openById(configure.spreadSheetId);
   }
   fetchMaker() {

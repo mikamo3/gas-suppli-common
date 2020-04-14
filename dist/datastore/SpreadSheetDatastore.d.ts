@@ -1,11 +1,12 @@
-import { Datastore } from "./Datastore";
+import { Datastore, DatastoreConfig } from "./Datastore";
 import { IIntakeValues } from "../model";
+declare type SpreadSheetDatastoreConfig = {
+    spreadSheetId: string;
+} & DatastoreConfig;
 export declare class SpreadSheetDatastore implements Datastore {
     private sheetValues;
     private spreadSheet;
-    constructor(configure: {
-        spreadSheetId: string;
-    });
+    constructor(configure: SpreadSheetDatastoreConfig);
     fetchMaker(): Pick<import("../model").Maker, "id" | "name">[];
     fetchIntake(): Pick<import("../model").Intake, "id" | "typeId" | "serving" | "timingId">[];
     fetchSuppli(): Pick<import("../model").Suppli, "id" | "name" | "makerId" | "typeId" | "amountPerServing" | "servingUnit">[];
@@ -17,3 +18,4 @@ export declare class SpreadSheetDatastore implements Datastore {
     private convertModelValues;
     updateIntakes(intakes: IIntakeValues[]): void;
 }
+export {};

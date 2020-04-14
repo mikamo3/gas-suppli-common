@@ -10,6 +10,9 @@ var intakeColumnPosition = {
 var SpreadSheetDatastore = /** @class */ (function () {
     function SpreadSheetDatastore(configure) {
         this.sheetValues = {};
+        if (!configure.spreadSheetId) {
+            throw Error("configure.spreadSheetId does not found");
+        }
         this.spreadSheet = SpreadsheetApp.openById(configure.spreadSheetId);
     }
     SpreadSheetDatastore.prototype.fetchMaker = function () {

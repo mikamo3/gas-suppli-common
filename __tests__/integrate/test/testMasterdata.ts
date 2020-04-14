@@ -6,7 +6,8 @@ import {
   IMakerValues,
   ISuppliValues,
   ISuppliAmountValues,
-  IIntakeValues
+  IIntakeValues,
+  createDatastore
 } from "../../../src/index";
 import { setTestdata } from "../spreadsheet";
 import { assert, testMasterRepository } from "./common";
@@ -65,7 +66,7 @@ export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
       const testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(
         "testSpreadSheetId"
       );
-      const dataStore = new SpreadSheetDatastore({ spreadSheetId: testSpreadSheetId });
+      const dataStore = createDatastore(SpreadSheetDatastore, { spreadSheetId: testSpreadSheetId });
       const repository = new MasterRepository(dataStore);
       const expectedType: ITypeValues[] = [
         { id: 1, name: "type1" },

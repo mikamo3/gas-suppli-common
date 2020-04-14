@@ -1,6 +1,11 @@
 import { testMasterRepository, assert } from "./common";
 import { setTestdata } from "../spreadsheet";
-import { SpreadSheetDatastore, MasterRepository, IIntakeValues } from "../../../src";
+import {
+  SpreadSheetDatastore,
+  MasterRepository,
+  IIntakeValues,
+  createDatastore
+} from "../../../src";
 
 export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
   testMasterRepository(
@@ -25,7 +30,7 @@ export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
       const testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(
         "testSpreadSheetId"
       );
-      const dataStore = new SpreadSheetDatastore({ spreadSheetId: testSpreadSheetId });
+      const dataStore = createDatastore(SpreadSheetDatastore, { spreadSheetId: testSpreadSheetId });
       const repository = new MasterRepository(dataStore);
       const expectedIntakeValues: IIntakeValues[] = [
         { id: 1, timingId: 10, typeId: 100, serving: 0.1 },

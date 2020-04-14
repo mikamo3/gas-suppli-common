@@ -16,3 +16,10 @@ export interface Datastore {
   fetchIntake: () => IIntakeValues[];
   updateIntakes: (intakes: IIntakeValues[]) => void;
 }
+
+export interface DatastoreConstructor {
+  new (configure: DatastoreConfig): Datastore;
+}
+export type DatastoreConfig = {};
+export const createDatastore = (datastore: DatastoreConstructor, configure: DatastoreConfig) =>
+  new datastore(configure);
