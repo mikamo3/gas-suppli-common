@@ -5,4 +5,5 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./Datastore"));
 __export(require("./SpreadSheetDatastore"));
+__export(require("./DummyDatastore"));
 //# sourceMappingURL=index.js.map
