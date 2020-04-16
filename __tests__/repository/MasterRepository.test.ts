@@ -1,42 +1,43 @@
-import MockedDatastore, {
+import { Datastore } from "datastore/Datastore";
+import { DummyDatastore } from "datastore/index";
+import {
+  IIntakeValues,
+  IMakerValues,
+  Intake,
+  ISuppliAmountValues,
+  ISuppliValues,
+  ITimingValues,
+  ITypeValues,
+  Maker,
+  Suppli,
+  SuppliAmount,
+  Timing,
+  Type
+} from "model/index";
+import { MasterRepository } from "repository/index";
+import {
   createIntake,
   createMaker,
   createSuppli,
   createSuppliAmount,
   createTiming,
-  createType,
-  init,
-  setFetchIntakeReturnValue,
-  setFetchMakerReturnValue,
-  setFetchSuppliAmountReturnValue,
-  setFetchSuppliReturnValue,
-  setFetchTimingReturnValue,
-  setFetchTypeReturnValue,
-  updateIntakes
-} from "mocks/datastore/MockDatastore";
-import { Datastore } from "datastore/Datastore";
-import {
-  Intake,
-  IIntakeValues,
-  ITypeValues,
-  Type,
-  ISuppliValues,
-  Suppli,
-  IMakerValues,
-  ISuppliAmountValues,
-  Maker,
-  SuppliAmount,
-  ITimingValues,
-  Timing
-} from "model/index";
-import { MasterRepository } from "repository/index";
+  createType
+} from "testhelper/model";
+import { mocked } from "ts-jest/utils";
+
 let masterRepository: MasterRepository;
 let datastore: Datastore;
 
-init();
+jest.spyOn(DummyDatastore.prototype, "fetchType");
+jest.spyOn(DummyDatastore.prototype, "fetchSuppli");
+jest.spyOn(DummyDatastore.prototype, "fetchIntake");
+jest.spyOn(DummyDatastore.prototype, "fetchSuppliAmount");
+jest.spyOn(DummyDatastore.prototype, "fetchMaker");
+jest.spyOn(DummyDatastore.prototype, "fetchTiming");
+jest.spyOn(DummyDatastore.prototype, "updateIntakes");
 
 beforeEach(() => {
-  datastore = new MockedDatastore();
+  datastore = new DummyDatastore({});
   masterRepository = new MasterRepository(datastore);
 });
 
@@ -45,18 +46,23 @@ afterEach(() => {
 });
 
 describe("getTypes", () => {
+  let fetchTypeReturnValue: ITypeValues[];
+  let fetchSuppliReturnValue: ISuppliValues[];
+  let fetchIntakeReturnValue: IIntakeValues[];
   let actual: Type[];
   beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchType).mockReturnValue(fetchTypeReturnValue);
+    mocked(DummyDatastore.prototype.fetchSuppli).mockReturnValue(fetchSuppliReturnValue);
+    mocked(DummyDatastore.prototype.fetchIntake).mockReturnValue(fetchIntakeReturnValue);
     actual = masterRepository.getTypes();
   });
   describe("複数件の場合", () => {
-    const fetchTypeReturnValue: ITypeValues[] = [
-      createType(1, "type1"),
-      createType(2, "type2"),
-      createType(3, "type3")
-    ];
     beforeAll(() => {
-      setFetchTypeReturnValue(fetchTypeReturnValue);
+      fetchTypeReturnValue = [
+        createType(1, "type1"),
+        createType(2, "type2"),
+        createType(3, "type3")
+      ];
     });
     it("Typeが件数分返却されること", () => {
       expect(actual.length).toEqual(3);
@@ -68,31 +74,24 @@ describe("getTypes", () => {
     });
   });
   describe("存在しない場合", () => {
-    const fetchTypeReturnValue: ITypeValues[] = [];
     beforeAll(() => {
-      setFetchTypeReturnValue(fetchTypeReturnValue);
+      fetchTypeReturnValue = [];
     });
     it("空配列が返却されること", () => {
       expect(actual).toEqual([]);
     });
   });
   describe("relationの確認", () => {
-    const fetchTypeReturnValue: ITypeValues[] = [
-      createType(1, "type1"),
-      createType(2, "type2"),
-      createType(3, "type3")
-    ];
     beforeAll(() => {
-      setFetchTypeReturnValue(fetchTypeReturnValue);
+      fetchTypeReturnValue = [
+        createType(1, "type1"),
+        createType(2, "type2"),
+        createType(3, "type3")
+      ];
     });
     describe("supplis", () => {
-      const fetchSuppliReturnValue: ISuppliValues[] = [
-        createSuppli(100, 1),
-        createSuppli(101, 1),
-        createSuppli(102, 3)
-      ];
       beforeAll(() => {
-        setFetchSuppliReturnValue(fetchSuppliReturnValue);
+        fetchSuppliReturnValue = [createSuppli(100, 1), createSuppli(101, 1), createSuppli(102, 3)];
       });
 
       it("Suppliが存在する場合はそれが返却されること", () => {
@@ -105,13 +104,12 @@ describe("getTypes", () => {
       });
     });
     describe("intakes", () => {
-      const fetchIntakeReturnValue: IIntakeValues[] = [
-        createIntake(10, 10, 1, 5),
-        createIntake(11, 11, 1, 6),
-        createIntake(12, 12, 3, 7)
-      ];
       beforeAll(() => {
-        setFetchIntakeReturnValue(fetchIntakeReturnValue);
+        fetchIntakeReturnValue = [
+          createIntake(10, 10, 1, 5),
+          createIntake(11, 11, 1, 6),
+          createIntake(12, 12, 3, 7)
+        ];
       });
 
       it("Intakeが存在する場合はそれが返却されること", () => {
@@ -127,15 +125,24 @@ describe("getTypes", () => {
 });
 
 describe("getSupplis", () => {
-  const fetchSuppliReturnValue: ISuppliValues[] = [
-    createSuppli(1, 10, 100, "suppli1", 10, "unit1"),
-    createSuppli(2, 11, 101, "suppli2", 11, "unit2")
-  ];
+  let fetchSuppliReturnValue: ISuppliValues[];
+  let fetchTypeReturnValue: ITypeValues[];
+  let fetchMakerReturnValue: IMakerValues[];
+  let fetchSuppliAmountReturnValue: ISuppliAmountValues[];
   let actual: Suppli[];
   beforeAll(() => {
-    setFetchSuppliReturnValue(fetchSuppliReturnValue);
+    fetchSuppliReturnValue = [
+      createSuppli(1, 10, 100, "suppli1", 10, "unit1"),
+      createSuppli(2, 11, 101, "suppli2", 11, "unit2")
+    ];
   });
   beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchSuppli).mockReturnValue(fetchSuppliReturnValue);
+    mocked(DummyDatastore.prototype.fetchType).mockReturnValue(fetchTypeReturnValue);
+    mocked(DummyDatastore.prototype.fetchMaker).mockReturnValue(fetchMakerReturnValue);
+    mocked(DummyDatastore.prototype.fetchSuppliAmount).mockReturnValue(
+      fetchSuppliAmountReturnValue
+    );
     actual = masterRepository.getSupplis();
   });
   it("Suppliが件数分返却されること", () => {
@@ -150,27 +157,22 @@ describe("getSupplis", () => {
   });
   describe("存在しない場合", () => {
     beforeAll(() => {
-      setFetchSuppliReturnValue([]);
+      fetchSuppliReturnValue = [];
     });
     it("空配列が返却されること", () => {
       expect(actual).toEqual([]);
     });
   });
   describe("relationの確認", () => {
-    const fetchSuppliReturnValue: ISuppliValues[] = [
-      createSuppli(1, 10, 100, "suppli1", 10, "unit1"),
-      createSuppli(2, 11, 101, "suppli2", 11, "unit2")
-    ];
     beforeAll(() => {
-      setFetchSuppliReturnValue(fetchSuppliReturnValue);
+      fetchSuppliReturnValue = [
+        createSuppli(1, 10, 100, "suppli1", 10, "unit1"),
+        createSuppli(2, 11, 101, "suppli2", 11, "unit2")
+      ];
     });
     describe("type", () => {
-      const fetchTypeReturnValue: ITypeValues[] = [
-        createType(10, "type1"),
-        createType(12, "type2")
-      ];
       beforeAll(() => {
-        setFetchTypeReturnValue(fetchTypeReturnValue);
+        fetchTypeReturnValue = [createType(10, "type1"), createType(12, "type2")];
       });
       it("Suppliが存在する場合はそれが返却されること", () => {
         expect(actual[0].type).toMatchObject(fetchTypeReturnValue[0]);
@@ -180,9 +182,8 @@ describe("getSupplis", () => {
       });
     });
     describe("maker", () => {
-      const fetchMakerReturnValue: IMakerValues[] = [createMaker(101), createMaker(102)];
       beforeAll(() => {
-        setFetchMakerReturnValue(fetchMakerReturnValue);
+        fetchMakerReturnValue = [createMaker(101), createMaker(102)];
       });
       it("Makerが存在する場合はそれが返却されること", () => {
         expect(actual[1].maker).toMatchObject(fetchMakerReturnValue[0]);
@@ -192,13 +193,12 @@ describe("getSupplis", () => {
       });
     });
     describe("suppliAmounts", () => {
-      const fetchSuppliAmountReturnValue: ISuppliAmountValues[] = [
-        createSuppliAmount(1000, 1),
-        createSuppliAmount(1001, 1),
-        createSuppliAmount(1002, 3)
-      ];
       beforeAll(() => {
-        setFetchSuppliAmountReturnValue(fetchSuppliAmountReturnValue);
+        fetchSuppliAmountReturnValue = [
+          createSuppliAmount(1000, 1),
+          createSuppliAmount(1001, 1),
+          createSuppliAmount(1002, 3)
+        ];
       });
       it("SuppliAmountsが存在する場合はそれが返却されること", () => {
         expect(actual[0].suppliAmounts).toHaveLength(2);
@@ -214,17 +214,22 @@ describe("getSupplis", () => {
 
 describe("getMakers", () => {
   let actual: Maker[];
+  let fetchMakerReturnValue: IMakerValues[];
+  let fetchSuppliReturnValue: ISuppliValues[];
+
   beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchMaker).mockReturnValue(fetchMakerReturnValue);
+    mocked(DummyDatastore.prototype.fetchSuppli).mockReturnValue(fetchSuppliReturnValue);
     actual = masterRepository.getMakers();
   });
+
   describe("複数件の場合", () => {
-    const fetchMakerReturnValue: IMakerValues[] = [
-      createMaker(1, "maker1"),
-      createMaker(2, "maker2"),
-      createMaker(3, "maker3")
-    ];
     beforeAll(() => {
-      setFetchMakerReturnValue(fetchMakerReturnValue);
+      fetchMakerReturnValue = [
+        createMaker(1, "maker1"),
+        createMaker(2, "maker2"),
+        createMaker(3, "maker3")
+      ];
     });
     it("Makerが件数分返却されること", () => {
       expect(actual.length).toEqual(3);
@@ -236,28 +241,25 @@ describe("getMakers", () => {
     });
   });
   describe("存在しない場合", () => {
-    const fetchMakerReturnValue: IMakerValues[] = [];
     beforeAll(() => {
-      setFetchMakerReturnValue(fetchMakerReturnValue);
+      fetchMakerReturnValue = [];
     });
     it("空配列が返却されること", () => {
       expect(actual).toEqual([]);
     });
   });
   describe("relationの確認", () => {
-    const fetchMakerReturnValue: IMakerValues[] = [
-      createMaker(1, "maker1"),
-      createMaker(2, "maker2"),
-      createMaker(3, "maker3")
-    ];
-    const fetchSuppliReturnValue: ISuppliValues[] = [
-      createSuppli(100, 10, 1),
-      createSuppli(101, 10, 1),
-      createSuppli(102, 10, 3)
-    ];
     beforeAll(() => {
-      setFetchMakerReturnValue(fetchMakerReturnValue);
-      setFetchSuppliReturnValue(fetchSuppliReturnValue);
+      fetchMakerReturnValue = [
+        createMaker(1, "maker1"),
+        createMaker(2, "maker2"),
+        createMaker(3, "maker3")
+      ];
+      fetchSuppliReturnValue = [
+        createSuppli(100, 10, 1),
+        createSuppli(101, 10, 1),
+        createSuppli(102, 10, 3)
+      ];
     });
 
     it("Suppliが存在する場合はそれが返却されること", () => {
@@ -272,16 +274,21 @@ describe("getMakers", () => {
 });
 
 describe("getSuppliAmounts", () => {
-  const fetchSuppliAmountsReturnValue: ISuppliAmountValues[] = [
-    createSuppliAmount(1, 11, 101),
-    createSuppliAmount(2, 12, 102),
-    createSuppliAmount(3, 13, 103)
-  ];
+  let fetchSuppliReturnValue: ISuppliValues[];
+  let fetchSuppliAmountsReturnValue: ISuppliAmountValues[];
   let actual: SuppliAmount[];
   beforeAll(() => {
-    setFetchSuppliAmountReturnValue(fetchSuppliAmountsReturnValue);
+    fetchSuppliAmountsReturnValue = [
+      createSuppliAmount(1, 11, 101),
+      createSuppliAmount(2, 12, 102),
+      createSuppliAmount(3, 13, 103)
+    ];
   });
   beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchSuppliAmount).mockReturnValue(
+      fetchSuppliAmountsReturnValue
+    );
+    mocked(DummyDatastore.prototype.fetchSuppli).mockReturnValue(fetchSuppliReturnValue);
     actual = masterRepository.getSuppliAmounts();
   });
   it("SuppliAmountが件数分返却されること", () => {
@@ -294,21 +301,16 @@ describe("getSuppliAmounts", () => {
   });
   describe("存在しない場合", () => {
     beforeAll(() => {
-      setFetchSuppliAmountReturnValue([]);
+      fetchSuppliAmountsReturnValue = [];
     });
     it("空配列が返却されること", () => {
       expect(actual).toEqual([]);
     });
   });
   describe("relationの確認", () => {
-    const fetchSuppliAmountsReturnValue: ISuppliAmountValues[] = [
-      createSuppliAmount(1, 10),
-      createSuppliAmount(2, 11)
-    ];
-    const fetchSuppliReturnValue: ISuppliValues[] = [createSuppli(10)];
     beforeAll(() => {
-      setFetchSuppliAmountReturnValue(fetchSuppliAmountsReturnValue);
-      setFetchSuppliReturnValue(fetchSuppliReturnValue);
+      fetchSuppliAmountsReturnValue = [createSuppliAmount(1, 10), createSuppliAmount(2, 11)];
+      fetchSuppliReturnValue = [createSuppli(10)];
     });
     it("Suppliが存在する場合はそれが返却されること", () => {
       expect(actual[0].suppli.id).toEqual(10);
@@ -320,16 +322,20 @@ describe("getSuppliAmounts", () => {
 });
 
 describe("getTimings", () => {
-  const fetchTimingReturnValue: ITimingValues[] = [
-    { id: 1, name: "timing1" },
-    { id: 2, name: "timing2" },
-    { id: 3, name: "timing3" }
-  ];
+  let fetchTimingReturnValue: ITimingValues[];
+  let fetchIntakeReturnValue: IIntakeValues[];
   let actual: Timing[];
+
   beforeAll(() => {
-    setFetchTimingReturnValue(fetchTimingReturnValue);
+    fetchTimingReturnValue = [
+      { id: 1, name: "timing1" },
+      { id: 2, name: "timing2" },
+      { id: 3, name: "timing3" }
+    ];
   });
   beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchTiming).mockReturnValue(fetchTimingReturnValue);
+    mocked(DummyDatastore.prototype.fetchIntake).mockReturnValue(fetchIntakeReturnValue);
     actual = masterRepository.getTimings();
   });
   it("Timingが件数分返却されること", () => {
@@ -343,18 +349,16 @@ describe("getTimings", () => {
 
   describe("存在しない場合", () => {
     beforeAll(() => {
-      setFetchTimingReturnValue([]);
+      fetchTimingReturnValue = [];
     });
     it("空配列が返却されること", () => {
       expect(actual).toEqual([]);
     });
   });
   describe("relationの確認", () => {
-    const fetchTimingReturnValue: ITimingValues[] = [createTiming(1), createTiming(2)];
-    const fetchIntakeReturnValue: IIntakeValues[] = [createIntake(10, 1), createIntake(11, 1)];
     beforeAll(() => {
-      setFetchTimingReturnValue(fetchTimingReturnValue);
-      setFetchIntakeReturnValue(fetchIntakeReturnValue);
+      fetchTimingReturnValue = [createTiming(1), createTiming(2)];
+      fetchIntakeReturnValue = [createIntake(10, 1), createIntake(11, 1)];
     });
     it("Intakeが存在する場合はそれが返却されること", () => {
       expect(actual[0].intakes[0].id).toEqual(10);
@@ -367,16 +371,21 @@ describe("getTimings", () => {
 });
 
 describe("getIntakes", () => {
-  const fetchIntakeReturnValue: IIntakeValues[] = [
-    createIntake(1, 10, 100, 5),
-    createIntake(2, 11, 101, 6),
-    createIntake(2, 12, 102, 6)
-  ];
+  let fetchIntakeReturnValue: IIntakeValues[];
+  let fetchTimingReturnValue: ITimingValues[];
+  let fetchTypeReturnValue: ITimingValues[];
   let actual: Intake[];
   beforeAll(() => {
-    setFetchIntakeReturnValue(fetchIntakeReturnValue);
+    fetchIntakeReturnValue = [
+      createIntake(1, 10, 100, 5),
+      createIntake(2, 11, 101, 6),
+      createIntake(2, 12, 102, 6)
+    ];
   });
   beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchIntake).mockReturnValue(fetchIntakeReturnValue);
+    mocked(DummyDatastore.prototype.fetchTiming).mockReturnValue(fetchTimingReturnValue);
+    mocked(DummyDatastore.prototype.fetchType).mockReturnValue(fetchTypeReturnValue);
     actual = masterRepository.getIntakes();
   });
   it("Intakeが件数分返却されること", () => {
@@ -390,25 +399,23 @@ describe("getIntakes", () => {
   });
   describe("存在しない場合", () => {
     beforeAll(() => {
-      setFetchIntakeReturnValue([]);
+      fetchIntakeReturnValue = [];
     });
     it("空配列が返却されること", () => {
       expect(actual).toEqual([]);
     });
   });
   describe("relationの確認", () => {
-    const fetchIntakeReturnValue: IIntakeValues[] = [
-      createIntake(1, 10, 100),
-      createIntake(2, 10, 102),
-      createIntake(3, 12, 102)
-    ];
     beforeAll(() => {
-      setFetchIntakeReturnValue(fetchIntakeReturnValue);
+      fetchIntakeReturnValue = [
+        createIntake(1, 10, 100),
+        createIntake(2, 10, 102),
+        createIntake(3, 12, 102)
+      ];
     });
     describe("timing", () => {
-      const fetchTimingReturnValue: ITimingValues[] = [createTiming(10), createTiming(11)];
       beforeAll(() => {
-        setFetchTimingReturnValue(fetchTimingReturnValue);
+        fetchTimingReturnValue = [createTiming(10), createTiming(11)];
       });
       it("Timingが存在する場合はそれが返却されること", () => {
         expect(actual[0].timing.id).toEqual(10);
@@ -418,9 +425,8 @@ describe("getIntakes", () => {
       });
     });
     describe("type", () => {
-      const fetchTypeReturnValue: ITypeValues[] = [createType(101), createType(102)];
       beforeAll(() => {
-        setFetchTypeReturnValue(fetchTypeReturnValue);
+        fetchTypeReturnValue = [createType(101), createType(102)];
       });
       it("Typeが存在する場合はそれが返却されること", () => {
         expect(actual[1].type.id).toEqual(102);
@@ -442,7 +448,7 @@ describe("updateIntakes", () => {
       intakes = [];
     });
     it("datastore.updateIntakesが空の配列で呼び出されること", () => {
-      expect(updateIntakes).toBeCalledWith([]);
+      expect(DummyDatastore.prototype.updateIntakes).toBeCalledWith([]);
     });
   });
   describe("複数のIntakeが指定されたとき", () => {
@@ -466,7 +472,7 @@ describe("updateIntakes", () => {
     });
     it("datastore.updateIntakesが期待したパラメータで呼び出されること", () => {
       const expected = intakeValues;
-      expect(updateIntakes).toBeCalledWith(expected);
+      expect(DummyDatastore.prototype.updateIntakes).toBeCalledWith(expected);
     });
   });
 });

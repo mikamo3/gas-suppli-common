@@ -116,14 +116,14 @@ export class MasterRepository {
     this.datastore.updateIntakes(intakeValues);
   }
 
-  private createType(type: ITypeValues) {
+  createType(type: ITypeValues) {
     return new Type(
       type,
       () => this.getSupplisByTypeId(type.id),
       () => this.getIntakesByTypeId(type.id)
     );
   }
-  private createSuppli(suppli: ISuppliValues) {
+  createSuppli(suppli: ISuppliValues) {
     return new Suppli(
       suppli,
       () => this.getTypeById(suppli.typeId),
@@ -131,16 +131,16 @@ export class MasterRepository {
       () => this.getSuppliAmountsBySuppliId(suppli.id)
     );
   }
-  private createMaker(maker: IMakerValues) {
+  createMaker(maker: IMakerValues) {
     return new Maker(maker, () => this.getSupplisByMakerId(maker.id));
   }
-  private createSuppliAmounts(suppliAmount: ISuppliAmountValues) {
+  createSuppliAmounts(suppliAmount: ISuppliAmountValues) {
     return new SuppliAmount(suppliAmount, () => this.getSuppliById(suppliAmount.suppliId));
   }
-  private createTiming(timing: ITimingValues) {
+  createTiming(timing: ITimingValues) {
     return new Timing(timing, () => this.getIntakesByTimingId(timing.id));
   }
-  private createIntake(intake: IIntakeValues) {
+  createIntake(intake: IIntakeValues) {
     return new Intake(
       intake,
       () => this.getTimingById(intake.timingId),

@@ -11,7 +11,7 @@ import {
 } from "model/index";
 import MockSpreadSheet from "mocks/gas/MockSpreadSheet";
 import { mocked } from "ts-jest/utils";
-import { createIntake } from "mocks/datastore/MockDatastore";
+import { createIntake } from "testhelper/model";
 const openById = jest.fn();
 let spreadSheetValues: Array<Array<string | number>>;
 let spreadSheetDatastore: SpreadSheetDatastore;

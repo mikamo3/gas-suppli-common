@@ -10,11 +10,11 @@
       "model/*": ["src/model/*"],
       "datastore/*": ["src/datastore/*"],
       "repository/*": ["src/repository/*"],
-      "mocks/*": ["__mocks__/*"]
+      "mocks/*": ["__mocks__/*"],
+      "testhelper/*": ["__testhelper__/*"]
     },
     "moduleResolution": "Node",
     "skipLibCheck": true,
     "outDir": "dist"
-  },
-  "exclude": ["__mocks__", "__tests__"]
+  }
 }

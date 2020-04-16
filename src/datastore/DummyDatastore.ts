@@ -1,29 +1,37 @@
 import { Datastore, DatastoreConfig } from "./Datastore";
+import {
+  IIntakeValues,
+  IMakerValues,
+  ISuppliValues,
+  ISuppliAmountValues,
+  ITimingValues,
+  ITypeValues
+} from "model/index";
 
 export class DummyDatastore implements Datastore {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(configure: DatastoreConfig) {
     //do nothing
   }
-  fetchIntake() {
+  fetchIntake(): IIntakeValues[] {
     return [];
   }
-  fetchMaker() {
+  fetchMaker(): IMakerValues[] {
     return [];
   }
-  fetchSuppli() {
+  fetchSuppli(): ISuppliValues[] {
     return [];
   }
-  fetchSuppliAmount() {
+  fetchSuppliAmount(): ISuppliAmountValues[] {
     return [];
   }
-  fetchTiming() {
+  fetchTiming(): ITimingValues[] {
     return [];
   }
-  fetchType() {
+  fetchType(): ITypeValues[] {
     return [];
   }
   updateIntakes() {
-    return [];
+    //do nothing
   }
 }
