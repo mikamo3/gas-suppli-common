@@ -18,7 +18,7 @@ export declare class MasterRepository {
     getIntakes(): Intake[];
     getIntakesByTypeId(typeId: number): Intake[];
     getIntakesByTimingId(timingId: number): Intake[];
-    updateIntakes(intakes: Intake[]): void;
+    updateIntakes(intakes: Array<Intake | IIntakeValues>): void;
     createType(type: ITypeValues): Type;
     createSuppli(suppli: ISuppliValues): Suppli;
     createMaker(maker: IMakerValues): Maker;

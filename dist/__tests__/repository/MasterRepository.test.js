@@ -427,5 +427,21 @@ describe("updateIntakes", function () {
             expect(index_1.DummyDatastore.prototype.updateIntakes).toBeCalledWith(expected);
         });
     });
+    describe("Intake,IIntakeValuesが渡されたとき", function () {
+        var intakeValues = [
+            { id: 1, timingId: 10, typeId: 100, serving: 5 },
+            { id: 2, timingId: 11, typeId: 101, serving: 6 }
+        ];
+        beforeAll(function () {
+            intakes = [
+                new index_2.Intake(intakeValues[0], function () { return masterRepository.getTimingById(1); }, function () { return masterRepository.getTypeById(1); }),
+                intakeValues[1]
+            ];
+        });
+        it("datastore.updateIntakesが期待したパラメータで呼び出されること", function () {
+            var expected = intakeValues;
+            expect(index_1.DummyDatastore.prototype.updateIntakes).toBeCalledWith(expected);
+        });
+    });
 });
 //# sourceMappingURL=MasterRepository.test.js.map

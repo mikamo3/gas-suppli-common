@@ -439,7 +439,7 @@ describe("getIntakes", () => {
   });
 });
 describe("updateIntakes", () => {
-  let intakes: Intake[];
+  let intakes: Array<Intake | IIntakeValues>;
   beforeEach(() => {
     masterRepository.updateIntakes(intakes);
   });
@@ -468,6 +468,26 @@ describe("updateIntakes", () => {
           () => masterRepository.getTimingById(1),
           () => masterRepository.getTypeById(1)
         )
+      ];
+    });
+    it("datastore.updateIntakesが期待したパラメータで呼び出されること", () => {
+      const expected = intakeValues;
+      expect(DummyDatastore.prototype.updateIntakes).toBeCalledWith(expected);
+    });
+  });
+  describe("Intake,IIntakeValuesが渡されたとき", () => {
+    const intakeValues: IIntakeValues[] = [
+      { id: 1, timingId: 10, typeId: 100, serving: 5 },
+      { id: 2, timingId: 11, typeId: 101, serving: 6 }
+    ];
+    beforeAll(() => {
+      intakes = [
+        new Intake(
+          intakeValues[0],
+          () => masterRepository.getTimingById(1),
+          () => masterRepository.getTypeById(1)
+        ),
+        intakeValues[1]
       ];
     });
     it("datastore.updateIntakesが期待したパラメータで呼び出されること", () => {

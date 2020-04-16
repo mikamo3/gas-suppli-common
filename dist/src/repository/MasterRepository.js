@@ -98,12 +98,17 @@ var MasterRepository = /** @class */ (function () {
         return underscore_1.filter(intakes, function (i) { return i.timingId === timingId; }).map(function (i) { return _this.createIntake(i); });
     };
     MasterRepository.prototype.updateIntakes = function (intakes) {
-        var intakeValues = intakes.map(function (i) { return ({
-            id: i.id,
-            serving: i.serving,
-            timingId: i.timingId,
-            typeId: i.typeId
-        }); });
+        var intakeValues = intakes.map(function (i) {
+            if (i instanceof index_1.Intake) {
+                return {
+                    id: i.id,
+                    serving: i.serving,
+                    timingId: i.timingId,
+                    typeId: i.typeId
+                };
+            }
+            return i;
+        });
         this.datastore.updateIntakes(intakeValues);
     };
     MasterRepository.prototype.createType = function (type) {
