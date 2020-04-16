@@ -1,6 +1,4 @@
 const path = require("path");
-const GasPlugin = require("gas-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
