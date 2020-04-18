@@ -87,7 +87,9 @@ export class SpreadSheetDatastore implements Datastore {
     delete this.sheetValues["intake"];
     const sheet = this.spreadSheet.getSheetByName("intake");
     const lastRow = sheet.getLastRow();
-    sheet.deleteRows(2, lastRow - 1);
+    if (lastRow - 1 > 0) {
+      sheet.deleteRows(2, lastRow - 1);
+    }
     if (intakes.length !== 0) {
       const intakeArray = intakes.map<IRowValues>(i => {
         const intakeRow = [];

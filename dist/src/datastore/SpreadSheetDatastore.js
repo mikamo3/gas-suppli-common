@@ -68,7 +68,9 @@ var SpreadSheetDatastore = /** @class */ (function () {
         delete this.sheetValues["intake"];
         var sheet = this.spreadSheet.getSheetByName("intake");
         var lastRow = sheet.getLastRow();
-        sheet.deleteRows(2, lastRow - 1);
+        if (lastRow - 1 > 0) {
+            sheet.deleteRows(2, lastRow - 1);
+        }
         if (intakes.length !== 0) {
             var intakeArray = intakes.map(function (i) {
                 var intakeRow = [];
