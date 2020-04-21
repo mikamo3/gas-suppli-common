@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var underscore_1 = require("underscore");
+var gas_lib_1 = require("gas-lib");
 var intakeColumnPosition = {
     id: 0,
     timingId: 1,
@@ -13,7 +14,7 @@ var SpreadSheetDatastore = /** @class */ (function () {
         if (!configure.spreadSheetId) {
             throw Error("configure.spreadSheetId does not found");
         }
-        this.spreadSheet = SpreadsheetApp.openById(configure.spreadSheetId);
+        this.spreadSheet = gas_lib_1.Spreadsheet.openById(configure.spreadSheetId);
     }
     SpreadSheetDatastore.prototype.fetchMaker = function () {
         return this.fetch("maker");
@@ -35,10 +36,7 @@ var SpreadSheetDatastore = /** @class */ (function () {
     };
     SpreadSheetDatastore.prototype.fetch = function (sheetName) {
         if (!(sheetName in this.sheetValues)) {
-            var sheetValues = this.spreadSheet
-                .getSheetByName(sheetName)
-                .getDataRange()
-                .getValues();
+            var sheetValues = this.spreadSheet.getAllValues(sheetName);
             this.sheetValues[sheetName] = sheetValues;
         }
         if (this.sheetValues[sheetName].length === 0) {
@@ -66,23 +64,14 @@ var SpreadSheetDatastore = /** @class */ (function () {
     };
     SpreadSheetDatastore.prototype.updateIntakes = function (intakes) {
         delete this.sheetValues["intake"];
-        var sheet = this.spreadSheet.getSheetByName("intake");
-        var lastRow = sheet.getLastRow();
-        if (lastRow - 1 > 0) {
-            sheet.deleteRows(2, lastRow - 1);
-        }
-        if (intakes.length !== 0) {
-            var intakeArray = intakes.map(function (i) {
-                var intakeRow = [];
-                for (var position in intakeColumnPosition) {
-                    intakeRow[intakeColumnPosition[position]] = i[position];
-                }
-                return intakeRow;
-            });
-            sheet.insertRowsAfter(1, intakes.length);
-            var range = sheet.getRange(2, 1, intakeArray.length, intakeArray[0].length);
-            range.setValues(intakeArray);
-        }
+        var intakeArray = intakes.map(function (i) {
+            var intakeRow = [];
+            for (var position in intakeColumnPosition) {
+                intakeRow[intakeColumnPosition[position]] = i[position];
+            }
+            return intakeRow;
+        });
+        this.spreadSheet.replace("intake", intakeArray, 1);
     };
     return SpreadSheetDatastore;
 }());

@@ -17,6 +17,11 @@
     "build:test": "webpack --config webpack.config.test.js",
     "push": "yarn run build:test && clasp push"
   },
+  "dependencies": {
+    "@types/underscore": "^1.9.4",
+    "gas-lib": "../node_modules/gas-lib",
+    "underscore": "^1.10.2"
+  },
   "devDependencies": {
     "@google/clasp": "^2.3.0",
     "@types/google-apps-script": "1.0.12",
@@ -72,10 +77,6 @@
     "globals": {
       "SpreadsheetApp": {}
     }
-  },
-  "dependencies": {
-    "@types/underscore": "^1.9.4",
-    "underscore": "^1.10.2"
   },
   "husky": {
     "hooks": {

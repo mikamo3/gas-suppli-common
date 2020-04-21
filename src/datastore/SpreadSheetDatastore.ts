@@ -8,7 +8,7 @@ import {
   ITimingValues,
   ITypeValues
 } from "../model";
-
+import { Spreadsheet } from "gas-lib";
 type IColumPosition = { [s: string]: number };
 type IRowValues = Array<string | number>;
 type IHeaderColums = Array<string>;
@@ -26,13 +26,13 @@ type SpreadSheetDatastoreConfig = {
 
 export class SpreadSheetDatastore implements Datastore {
   private sheetValues: { [s: string]: ISheetValues };
-  private spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet;
+  private spreadSheet: Spreadsheet;
   constructor(configure: SpreadSheetDatastoreConfig) {
     this.sheetValues = {};
     if (!configure.spreadSheetId) {
       throw Error("configure.spreadSheetId does not found");
     }
-    this.spreadSheet = SpreadsheetApp.openById(configure.spreadSheetId);
+    this.spreadSheet = Spreadsheet.openById(configure.spreadSheetId);
   }
   fetchMaker() {
     return this.fetch<IMakerValues>("maker");
@@ -54,10 +54,7 @@ export class SpreadSheetDatastore implements Datastore {
   }
   private fetch<T>(sheetName: string) {
     if (!(sheetName in this.sheetValues)) {
-      const sheetValues = this.spreadSheet
-        .getSheetByName(sheetName)
-        .getDataRange()
-        .getValues() as ISheetValues;
+      const sheetValues = this.spreadSheet.getAllValues(sheetName) as ISheetValues;
       this.sheetValues[sheetName] = sheetValues;
     }
     if (this.sheetValues[sheetName].length === 0) {
@@ -85,22 +82,13 @@ export class SpreadSheetDatastore implements Datastore {
   }
   updateIntakes(intakes: IIntakeValues[]) {
     delete this.sheetValues["intake"];
-    const sheet = this.spreadSheet.getSheetByName("intake");
-    const lastRow = sheet.getLastRow();
-    if (lastRow - 1 > 0) {
-      sheet.deleteRows(2, lastRow - 1);
-    }
-    if (intakes.length !== 0) {
-      const intakeArray = intakes.map<IRowValues>(i => {
-        const intakeRow = [];
-        for (const position in intakeColumnPosition) {
-          intakeRow[intakeColumnPosition[position]] = i[position];
-        }
-        return intakeRow;
-      });
-      sheet.insertRowsAfter(1, intakes.length);
-      const range = sheet.getRange(2, 1, intakeArray.length, intakeArray[0].length);
-      range.setValues(intakeArray);
-    }
+    const intakeArray = intakes.map<IRowValues>(i => {
+      const intakeRow = [];
+      for (const position in intakeColumnPosition) {
+        intakeRow[intakeColumnPosition[position]] = i[position];
+      }
+      return intakeRow;
+    });
+    this.spreadSheet.replace("intake", intakeArray, 1);
   }
 }

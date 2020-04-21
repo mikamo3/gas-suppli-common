@@ -19,7 +19,8 @@
     "source=gas-suppli-common-node_modules,target=/workspace/node_modules,type=volume",
     "source=${env:HOME}${env:USERPROFILE}/.ssh,target=/home/dev/.ssh,type=bind,consistency=cached",
     "source=${env:HOME}${env:USERPROFILE}/.gitconfig,target=/home/dev/.gitconfig,type=bind,consistency=cached",
-    "source=${env:HOME}${env:USERPROFILE}/.clasprc.json,target=/home/dev/.clasprc.json,type=bind,consistency=cached"
+    "source=${env:HOME}${env:USERPROFILE}/.clasprc.json,target=/home/dev/.clasprc.json,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/../gas-lib,target=/node_modules/gas-lib,type=bind"
   ],
   "postCreateCommand": "sudo chown dev /workspace/node_modules"
 }

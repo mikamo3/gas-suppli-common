@@ -2870,6 +2870,12 @@ gas-entry-generator@1.1.1:
     esprima "4.0.1"
     estraverse "4.2.0"
 
+gas-lib@../node_modules/gas-lib:
+  version "1.0.0"
+  dependencies:
+    "@types/underscore" "^1.9.4"
+    underscore "^1.10.2"
+
 gas-webpack-plugin@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/gas-webpack-plugin/-/gas-webpack-plugin-1.0.2.tgz#710ed4d29f5ea04e32ce3e173a608bf12635770b"
