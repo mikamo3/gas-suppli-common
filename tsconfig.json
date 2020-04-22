@@ -10,6 +10,8 @@
       "model/*": ["src/model/*"],
       "datastore/*": ["src/datastore/*"],
       "repository/*": ["src/repository/*"],
+      "constant/*": ["src/constant/*"],
+      "env/*": ["src/env/*"],
       "mocks/*": ["__mocks__/*"],
       "testhelper/*": ["__testhelper__/*"]
     },

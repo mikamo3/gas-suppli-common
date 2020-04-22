@@ -20,7 +20,7 @@ exports.default = (function (spreadSheet) {
         spreadsheet_1.setTestdata(spreadsheet, "type", typeValues);
         spreadsheet_1.setTestdata(spreadsheet, "suppli", suppliValues);
     }, function () {
-        var testSpreadSheetId = PropertiesService.getScriptProperties().getProperty("testSpreadSheetId");
+        var testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(index_1.PropertyNames.mastersheetId);
         var dataStore = index_1.createDatastore(index_1.SpreadSheetDatastore, { spreadSheetId: testSpreadSheetId });
         var repository = new index_1.MasterRepository(dataStore);
         var actual = repository.getTypes();

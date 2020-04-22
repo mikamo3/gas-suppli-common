@@ -4,7 +4,8 @@ import {
   SpreadSheetDatastore,
   MasterRepository,
   IIntakeValues,
-  createDatastore
+  createDatastore,
+  PropertyNames
 } from "../../../src";
 
 export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
@@ -28,7 +29,7 @@ export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
         assert("取得件数が期待値どおりであること").toEqual(actual.length, expected.length);
       };
       const testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(
-        "testSpreadSheetId"
+        PropertyNames.mastersheetId
       );
       const dataStore = createDatastore(SpreadSheetDatastore, { spreadSheetId: testSpreadSheetId });
       const repository = new MasterRepository(dataStore);

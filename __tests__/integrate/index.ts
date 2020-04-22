@@ -2,33 +2,28 @@ import { deleteSpreadSheet, createSpreadSheet } from "./spreadsheet";
 import testMasterdata from "./test/testMasterdata";
 import testRelationType from "./test/testRelationType";
 import testUpdateIntakes from "./test/testUpdateIntakes";
+import { PropertyNames } from "constant/index";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let global: any;
 global.prepare = () => {
   const testFolderId = "1-Jp4B5XDGThm2bjKNxqme_6_5o0Xo4S3";
   const spreadSheetName = "サプリマスタ_テスト";
-  const testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(
-    "testSpreadSheetId"
+  const spreadsheetId = PropertiesService.getScriptProperties().getProperty(
+    PropertyNames.mastersheetId
   );
-  if (testSpreadSheetId) {
-    deleteSpreadSheet(testSpreadSheetId);
-    PropertiesService.getScriptProperties().setProperty("testSpreadSheetId", "");
+  if (spreadsheetId) {
+    deleteSpreadSheet(spreadsheetId);
+    PropertiesService.getScriptProperties().setProperty(PropertyNames.mastersheetId, "");
   }
-  const spreadsheetId = createSpreadSheet(spreadSheetName, testFolderId);
-  if (!spreadsheetId) {
+  const newSpreadsheetId = createSpreadSheet(spreadSheetName, testFolderId);
+  if (!newSpreadsheetId) {
     throw new Error("createFailed");
   }
-  PropertiesService.getScriptProperties().setProperty("testSpreadSheetId", spreadsheetId);
+  PropertiesService.getScriptProperties().setProperty(PropertyNames.mastersheetId, spreadsheetId);
 };
 global.runTest = () => {
-  const testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(
-    "testSpreadSheetId"
-  );
-  if (!testSpreadSheetId) {
-    throw new Error("spreadSheet does not exist");
-  }
-  const spreadsheet = SpreadsheetApp.openById(testSpreadSheetId);
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   testMasterdata(spreadsheet);
   testRelationType(spreadsheet);
   testUpdateIntakes(spreadsheet);

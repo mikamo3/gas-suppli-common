@@ -50,7 +50,7 @@ exports.default = (function (spreadSheet) {
             });
             common_1.assert("取得件数が期待値どおりであること").toEqual(actual.length, expected.length);
         };
-        var testSpreadSheetId = PropertiesService.getScriptProperties().getProperty("testSpreadSheetId");
+        var testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(index_1.PropertyNames.mastersheetId);
         var dataStore = index_1.createDatastore(index_1.SpreadSheetDatastore, { spreadSheetId: testSpreadSheetId });
         var repository = new index_1.MasterRepository(dataStore);
         var expectedType = [

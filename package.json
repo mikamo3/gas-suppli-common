@@ -69,7 +69,9 @@
       "mocks/(.*)$": "<rootDir>/__mocks__/$1",
       "testhelper/(.*)$": "<rootDir>/__testhelper__/$1",
       "datastore/(.*)$": "<rootDir>/src/datastore/$1",
-      "repository/(.*)$": "<rootDir>/src/repository/$1"
+      "repository/(.*)$": "<rootDir>/src/repository/$1",
+      "env/(.*)$": "<rootDir>/src/env/$1",
+      "constant/(.*)$": "<rootDir>/src/constant/$1"
     },
     "modulePathIgnorePatterns": [
       "<rootDir>/dist"

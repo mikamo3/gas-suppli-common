@@ -24,6 +24,8 @@ module.exports = {
       testhelper: path.resolve(__dirname, "./__testhelper__"),
       datastore: path.resolve(__dirname, "./src/datastore"),
       repository: path.resolve(__dirname, "./src/repository"),
+      constant: path.resolve(__dirname, "./src/constant"),
+      env: path.resolve(__dirname, "./src/env"),
     },
   },
   plugins: [new CleanWebpackPlugin()],
