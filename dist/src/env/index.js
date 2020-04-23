@@ -18,7 +18,7 @@ var createMasterRepository = function () {
     return new index_1.MasterRepository(new index_2.SpreadSheetDatastore({ spreadSheetId: spreadSheetId }));
 };
 exports.env = {
-    masterRepository: (function () {
+    getMasterRepository: function () {
         var stage = getEnv();
         switch (stage) {
             case "test":
@@ -29,6 +29,6 @@ exports.env = {
                 return createMasterRepository();
             }
         }
-    })()
+    }
 };
 //# sourceMappingURL=index.js.map

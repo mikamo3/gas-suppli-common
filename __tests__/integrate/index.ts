@@ -20,10 +20,16 @@ global.prepare = () => {
   if (!newSpreadsheetId) {
     throw new Error("createFailed");
   }
-  PropertiesService.getScriptProperties().setProperty(PropertyNames.mastersheetId, spreadsheetId);
+  PropertiesService.getScriptProperties().setProperty(
+    PropertyNames.mastersheetId,
+    newSpreadsheetId
+  );
 };
 global.runTest = () => {
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const spreadsheetId = PropertiesService.getScriptProperties().getProperty(
+    PropertyNames.mastersheetId
+  );
+  const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
   testMasterdata(spreadsheet);
   testRelationType(spreadsheet);
   testUpdateIntakes(spreadsheet);

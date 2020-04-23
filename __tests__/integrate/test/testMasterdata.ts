@@ -1,14 +1,11 @@
 import {
   ITypeValues,
-  MasterRepository,
-  SpreadSheetDatastore,
   ITimingValues,
   IMakerValues,
   ISuppliValues,
   ISuppliAmountValues,
   IIntakeValues,
-  createDatastore,
-  PropertyNames
+  env
 } from "../../../src/index";
 import { setTestdata } from "../spreadsheet";
 import { assert, testMasterRepository } from "./common";
@@ -64,11 +61,7 @@ export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
         );
         assert("取得件数が期待値どおりであること").toEqual(actual.length, expected.length);
       };
-      const testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(
-        PropertyNames.mastersheetId
-      );
-      const dataStore = createDatastore(SpreadSheetDatastore, { spreadSheetId: testSpreadSheetId });
-      const repository = new MasterRepository(dataStore);
+      const repository = env.getMasterRepository();
       const expectedType: ITypeValues[] = [
         { id: 1, name: "type1" },
         { id: 2, name: "type2" }

@@ -21,7 +21,7 @@ const createMasterRepository = () => {
 };
 
 export const env = {
-  masterRepository: (() => {
+  getMasterRepository: () => {
     const stage = getEnv();
     switch (stage) {
       case "test":
@@ -32,5 +32,5 @@ export const env = {
         return createMasterRepository();
       }
     }
-  })()
+  }
 };

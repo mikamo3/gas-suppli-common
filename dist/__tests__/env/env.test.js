@@ -6,7 +6,7 @@ jest.mock("datastore/index");
 describe("test環境の確認", function () {
     describe("masterRepository", function () {
         beforeEach(function () {
-            index_1.env.masterRepository;
+            index_1.env.getMasterRepository();
         });
         it("DummyDatastoreがInjectionされたMasterRepositoryが返却されること", function () {
             expect(index_2.DummyDatastore).toBeCalled();

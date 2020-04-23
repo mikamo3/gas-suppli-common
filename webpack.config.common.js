@@ -2,15 +2,9 @@ const path = require("path");
 const GasPlugin = require("gas-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-
+const webpack = require("webpack");
 module.exports = {
-  mode: "development",
-  entry: "./__tests__/integrate/index.ts",
   devtool: false,
-  output: {
-    filename: "bundle.js",
-    path: path.join(__dirname, "dist_test"),
-  },
   module: {
     rules: [
       {
@@ -30,9 +24,15 @@ module.exports = {
       env: path.resolve(__dirname, "./src/env"),
     },
   },
+  optimization: {
+    minimize: false,
+  },
   plugins: [
     new GasPlugin(),
     new CleanWebpackPlugin(),
     new CopyPlugin([{ from: "./appsscript.json", to: "./" }]),
+    new webpack.DefinePlugin({
+      "precess.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+    }),
   ],
 };

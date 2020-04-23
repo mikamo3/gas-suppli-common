@@ -1,12 +1,6 @@
 import { testMasterRepository, assert } from "./common";
 import { setTestdata } from "../spreadsheet";
-import {
-  SpreadSheetDatastore,
-  MasterRepository,
-  IIntakeValues,
-  createDatastore,
-  PropertyNames
-} from "../../../src";
+import { IIntakeValues, env } from "../../../src";
 
 export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
   testMasterRepository(
@@ -28,11 +22,7 @@ export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
         );
         assert("取得件数が期待値どおりであること").toEqual(actual.length, expected.length);
       };
-      const testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(
-        PropertyNames.mastersheetId
-      );
-      const dataStore = createDatastore(SpreadSheetDatastore, { spreadSheetId: testSpreadSheetId });
-      const repository = new MasterRepository(dataStore);
+      const repository = env.getMasterRepository();
       const expectedIntakeValues: IIntakeValues[] = [
         { id: 1, timingId: 10, typeId: 100, serving: 0.1 },
         { id: 2, timingId: 11, typeId: 101, serving: 0.2 }
@@ -44,7 +34,7 @@ export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
         { id: 3, timingId: 12, typeId: 102, serving: 0.3 },
         { id: 4, timingId: 13, typeId: 103, serving: 0.4 }
       ];
-      dataStore.updateIntakes(updateIntakeValues);
+      repository.updateIntakes(updateIntakeValues);
       const expectedIntakeValuesAfterUpdate = updateIntakeValues;
       assertReturnValue(repository.getIntakes(), expectedIntakeValuesAfterUpdate);
     }

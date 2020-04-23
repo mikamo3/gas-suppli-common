@@ -20,10 +20,11 @@ global.prepare = function () {
     if (!newSpreadsheetId) {
         throw new Error("createFailed");
     }
-    PropertiesService.getScriptProperties().setProperty(index_1.PropertyNames.mastersheetId, spreadsheetId);
+    PropertiesService.getScriptProperties().setProperty(index_1.PropertyNames.mastersheetId, newSpreadsheetId);
 };
 global.runTest = function () {
-    var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    var spreadsheetId = PropertiesService.getScriptProperties().getProperty(index_1.PropertyNames.mastersheetId);
+    var spreadsheet = SpreadsheetApp.openById(spreadsheetId);
     testMasterdata_1.default(spreadsheet);
     testRelationType_1.default(spreadsheet);
     testUpdateIntakes_1.default(spreadsheet);

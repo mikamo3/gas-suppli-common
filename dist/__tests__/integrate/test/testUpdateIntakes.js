@@ -18,9 +18,7 @@ exports.default = (function (spreadSheet) {
             });
             common_1.assert("取得件数が期待値どおりであること").toEqual(actual.length, expected.length);
         };
-        var testSpreadSheetId = PropertiesService.getScriptProperties().getProperty(src_1.PropertyNames.mastersheetId);
-        var dataStore = src_1.createDatastore(src_1.SpreadSheetDatastore, { spreadSheetId: testSpreadSheetId });
-        var repository = new src_1.MasterRepository(dataStore);
+        var repository = src_1.env.getMasterRepository();
         var expectedIntakeValues = [
             { id: 1, timingId: 10, typeId: 100, serving: 0.1 },
             { id: 2, timingId: 11, typeId: 101, serving: 0.2 }
@@ -32,7 +30,7 @@ exports.default = (function (spreadSheet) {
             { id: 3, timingId: 12, typeId: 102, serving: 0.3 },
             { id: 4, timingId: 13, typeId: 103, serving: 0.4 }
         ];
-        dataStore.updateIntakes(updateIntakeValues);
+        repository.updateIntakes(updateIntakeValues);
         var expectedIntakeValuesAfterUpdate = updateIntakeValues;
         assertReturnValue(repository.getIntakes(), expectedIntakeValuesAfterUpdate);
     });

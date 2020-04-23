@@ -16,7 +16,7 @@
     "sourceType": "module"
   },
   "settings": {
-    "import/resolver": { "webpack": { "config": "./webpack.config.js" } }
+    "import/resolver": { "webpack": { "config": "./webpack.config.common.js" } }
   },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": ["off"],
