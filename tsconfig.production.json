@@ -11,9 +11,7 @@
       "datastore/*": ["src/datastore/*"],
       "repository/*": ["src/repository/*"],
       "constant/*": ["src/constant/*"],
-      "env/*": ["src/env/*"],
-      "mocks/*": ["__mocks__/*"],
-      "testhelper/*": ["__testhelper__/*"]
+      "env/*": ["src/env/*"]
     },
     "moduleResolution": "Node",
     "skipLibCheck": true,
@@ -24,5 +22,6 @@
         "exclude": ["*"]
       }
     ]
-  }
+  },
+  "exclude": ["__testhelper__", "__tests__", "dist", "dist_test"]
 }

@@ -111,7 +111,6 @@ describe("fetchIntake", () => {
   ];
   let actual: ReturnType<typeof spreadSheetDatastore.fetchIntake>;
   beforeAll(() => {
-    configure = { spreadSheetId: "hogehoge" };
     getAllValuesRV = sheetValues;
   });
   beforeEach(() => {
@@ -136,7 +135,6 @@ describe("fetchSuppli", () => {
   ];
   let actual: ReturnType<typeof spreadSheetDatastore.fetchSuppli>;
   beforeAll(() => {
-    configure = { spreadSheetId: "hogehoge" };
     getAllValuesRV = sheetValues;
   });
   beforeEach(() => {
@@ -182,7 +180,6 @@ describe("fetchSuppliAmount", () => {
   ];
   let actual: ReturnType<typeof spreadSheetDatastore.fetchSuppliAmount>;
   beforeAll(() => {
-    configure = { spreadSheetId: "hogehoge" };
     getAllValuesRV = sheetValues;
   });
   beforeEach(() => {
@@ -206,7 +203,6 @@ describe("fetchTiming", () => {
   ];
   let actual: ReturnType<typeof spreadSheetDatastore.fetchTiming>;
   beforeAll(() => {
-    configure = { spreadSheetId: "hogehoge" };
     getAllValuesRV = sheetValues;
   });
   beforeEach(() => {
@@ -229,7 +225,6 @@ describe("fetchType", () => {
   ];
   let actual: ReturnType<typeof spreadSheetDatastore.fetchType>;
   beforeAll(() => {
-    configure = { spreadSheetId: "hogehoge" };
     getAllValuesRV = sheetValues;
   });
   beforeEach(() => {

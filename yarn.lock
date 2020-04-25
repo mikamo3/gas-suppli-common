@@ -877,6 +877,20 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
+"@zerollup/ts-helpers@^1.7.16":
+  version "1.7.16"
+  resolved "https://registry.yarnpkg.com/@zerollup/ts-helpers/-/ts-helpers-1.7.16.tgz#4b9b4bd14b3496917c17ca73c06a5b00ed05b7d1"
+  integrity sha512-vQ9n0XEcgcwuooyQRufow7DqC7d6ihWgpAeeEMADactHBfzL7Xj7iCRd18kVsRerwEy8rRaiJNN7GKADAVQ8Xw==
+  dependencies:
+    resolve "^1.12.0"
+
+"@zerollup/ts-transform-paths@^1.7.17":
+  version "1.7.17"
+  resolved "https://registry.yarnpkg.com/@zerollup/ts-transform-paths/-/ts-transform-paths-1.7.17.tgz#b9bfab9ad6a7c2e09f40930345f18c9435cda51f"
+  integrity sha512-sdf8v1s6/QllFjsidj1qcbHWjWexrQHMcX3fPByKlUAz4IPYK+tb/lag7peplDvyTi1GlwjKXWOQfBDZNhiyRg==
+  dependencies:
+    "@zerollup/ts-helpers" "^1.7.16"
+
 abab@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.3.tgz#623e2075e02eb2d3f2475e49f99c91846467907a"
@@ -5641,6 +5655,13 @@ resolve@1.x, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.13.1, resolve@^1.15.1, 
   dependencies:
     path-parse "^1.0.6"
 
+resolve@^1.12.0, resolve@^1.9.0:
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.17.0.tgz#b25941b54968231cc2d1bb76a79cb7f2c0bf8444"
+  integrity sha512-ic+7JYiV8Vi2yzQGFWOkiZD5Z9z7O2Zhm9XMaTxdJExKasieFCr+yXZ/WmXsckHiKl12ar0y6XiXDx3m4RHn1w==
+  dependencies:
+    path-parse "^1.0.6"
+
 responselike@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/responselike/-/responselike-1.0.2.tgz#918720ef3b631c5642be068f15ade5a46f4ba1e7"
@@ -6414,6 +6435,13 @@ tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
   integrity sha1-oVe6QC2iTpv5V/mqadUk7tQpAaY=
+
+ttypescript@^1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/ttypescript/-/ttypescript-1.5.10.tgz#5045083a91cf09a735ecc95d4711c1f3b83f2059"
+  integrity sha512-Hk7TRej1hM+p+Fo+Pyb/XK9pe9CAt3Sh5n5YRutxFS8hUgkh2u1Vd2K40kMcNP3WYhiVFBMqXwM/2E8O95Ep6g==
+  dependencies:
+    resolve "^1.9.0"
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
