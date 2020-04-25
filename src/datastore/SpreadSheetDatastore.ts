@@ -10,9 +10,9 @@ import {
 } from "../model";
 import { Spreadsheet } from "gas-lib";
 type IColumPosition = { [s: string]: number };
-type IRowValues = Array<string | number>;
-type IHeaderColums = Array<string>;
-type ISheetValues = Array<IRowValues>;
+export type IRowValues = Array<string | number>;
+export type IHeaderColums = Array<string>;
+export type ISheetValues = Array<IRowValues>;
 const intakeColumnPosition: { [s in keyof IIntakeValues]: number } = {
   id: 0,
   timingId: 1,

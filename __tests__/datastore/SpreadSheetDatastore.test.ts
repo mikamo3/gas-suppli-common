@@ -1,16 +1,23 @@
 import { SpreadSheetDatastore } from "datastore/index";
 import { Spreadsheet } from "gas-lib";
-import {
-  IMakerValues,
-  IIntakeValues,
-  ISuppliValues,
-  ISuppliAmountValues,
-  ITimingValues,
-  ITypeValues
-} from "model/index";
+import { IIntakeValues } from "model/index";
 
 import { mocked } from "ts-jest/utils";
-import { createIntakeValues } from "test/index";
+import {
+  createIntakeValues,
+  createMakerSheet,
+  createMaker,
+  createMakerValues,
+  createIntakeSheet,
+  createSuppliValues,
+  createSuppliSheet,
+  createSuppliAmountValues,
+  createSuppliAmountSheet,
+  createTimingValues,
+  createTimingSheet,
+  createTypeValues,
+  createTypeSheet
+} from "test/index";
 
 jest.mock("gas-lib");
 
@@ -48,11 +55,7 @@ describe("スプレッドシートの操作確認", () => {
   });
 });
 describe("キャッシュの確認", () => {
-  const sheetValues: Array<Array<string | number>> = [
-    ["id", "name"],
-    [1, "maker1"],
-    [2, "maker2"]
-  ];
+  const sheetValues = createMakerSheet([createMaker(), createMaker()]);
   beforeAll(() => {
     getAllValuesRV = sheetValues;
   });
@@ -67,7 +70,7 @@ describe("キャッシュの確認", () => {
 describe("取得結果が存在しない場合", () => {
   let actual: ReturnType<typeof spreadSheetDatastore.fetchMaker>;
   beforeAll(() => {
-    getAllValuesRV = [["foo", "bar"]];
+    getAllValuesRV = createMakerSheet([]);
   });
   beforeEach(() => {
     actual = spreadSheetDatastore.fetchMaker();
@@ -77,14 +80,10 @@ describe("取得結果が存在しない場合", () => {
   });
 });
 describe("fetchMaker", () => {
-  const sheetValues: Array<Array<string | number>> = [
-    ["id", "name"],
-    [1, "maker1"],
-    [2, "maker2"]
-  ];
+  const makers = [createMakerValues(1, "maker1"), createMakerValues(2, "maker2")];
+  const sheetValues = createMakerSheet(makers);
   let actual: ReturnType<typeof spreadSheetDatastore.fetchMaker>;
   beforeAll(() => {
-    configure = { spreadSheetId: "hogehoge" };
     getAllValuesRV = sheetValues;
   });
   beforeEach(() => {
@@ -94,21 +93,18 @@ describe("fetchMaker", () => {
     expect(Spreadsheet.prototype.getAllValues).toBeCalledWith("maker");
   });
   it("MakerValuesが件数分返却されること", () => {
-    const expected: IMakerValues[] = [
-      { id: 1, name: "maker1" },
-      { id: 2, name: "maker2" }
-    ];
+    const expected = makers;
     expect(actual).toEqual(expected);
   });
 });
 
 describe("fetchIntake", () => {
-  const sheetValues: Array<Array<string | number>> = [
-    ["id", "timingId", "typeId", "serving"],
-    [1, 10, 100, 5],
-    [2, 11, 101, 6],
-    [3, 12, 102, 7]
+  const intakes = [
+    createIntakeValues(1, 10, 100, 1000),
+    createIntakeValues(2, 11, 101, 1001),
+    createIntakeValues(3, 12, 102, 1002)
   ];
+  const sheetValues = createIntakeSheet(intakes);
   let actual: ReturnType<typeof spreadSheetDatastore.fetchIntake>;
   beforeAll(() => {
     getAllValuesRV = sheetValues;
@@ -117,22 +113,17 @@ describe("fetchIntake", () => {
     actual = spreadSheetDatastore.fetchIntake();
   });
   it("IntakeValuesが件数分返却されること", () => {
-    const expected: IIntakeValues[] = [
-      { id: 1, timingId: 10, typeId: 100, serving: 5 },
-      { id: 2, timingId: 11, typeId: 101, serving: 6 },
-      { id: 3, timingId: 12, typeId: 102, serving: 7 }
-    ];
+    const expected = intakes;
     expect(actual).toEqual(expected);
   });
 });
 
 describe("fetchSuppli", () => {
-  const sheetValues: Array<Array<string | number>> = [
-    ["id", "typeId", "makerId", "name", "amountPerServing", "servingUnit"],
-    [1, 10, 100, "suppli1", 5, "unit1"],
-    [2, 11, 101, "suppli2", 6, "unit2"],
-    [3, 12, 102, "suppli3", 7, "unit3"]
+  const supplis = [
+    createSuppliValues(1, 10, 100, "suppli1", 1000, "unit1"),
+    createSuppliValues(2, 11, 101, "suppli2", 1001, "unit2")
   ];
+  const sheetValues = createSuppliSheet(supplis);
   let actual: ReturnType<typeof spreadSheetDatastore.fetchSuppli>;
   beforeAll(() => {
     getAllValuesRV = sheetValues;
@@ -141,43 +132,17 @@ describe("fetchSuppli", () => {
     actual = spreadSheetDatastore.fetchSuppli();
   });
   it("SuppliValuesが件数分返却されること", () => {
-    const expected: ISuppliValues[] = [
-      {
-        id: 1,
-        typeId: 10,
-        makerId: 100,
-        name: "suppli1",
-        amountPerServing: 5,
-        servingUnit: "unit1"
-      },
-      {
-        id: 2,
-        typeId: 11,
-        makerId: 101,
-        name: "suppli2",
-        amountPerServing: 6,
-        servingUnit: "unit2"
-      },
-      {
-        id: 3,
-        typeId: 12,
-        makerId: 102,
-        name: "suppli3",
-        amountPerServing: 7,
-        servingUnit: "unit3"
-      }
-    ];
+    const expected = supplis;
     expect(actual).toEqual(expected);
   });
 });
 
 describe("fetchSuppliAmount", () => {
-  const sheetValues: Array<Array<string | number>> = [
-    ["id", "suppliId", "amount"],
-    [1, 10, 100],
-    [2, 11, 101],
-    [3, 12, 102]
+  const suppliAmounts = [
+    createSuppliAmountValues(1, 10, 100),
+    createSuppliAmountValues(2, 11, 101)
   ];
+  const sheetValues = createSuppliAmountSheet(suppliAmounts);
   let actual: ReturnType<typeof spreadSheetDatastore.fetchSuppliAmount>;
   beforeAll(() => {
     getAllValuesRV = sheetValues;
@@ -186,21 +151,14 @@ describe("fetchSuppliAmount", () => {
     actual = spreadSheetDatastore.fetchSuppliAmount();
   });
   it("SuppliAmountValuesが件数分返却されること", () => {
-    const expected: ISuppliAmountValues[] = [
-      { id: 1, suppliId: 10, amount: 100 },
-      { id: 2, suppliId: 11, amount: 101 },
-      { id: 3, suppliId: 12, amount: 102 }
-    ];
+    const expected = suppliAmounts;
     expect(actual).toEqual(expected);
   });
 });
 
 describe("fetchTiming", () => {
-  const sheetValues: Array<Array<string | number>> = [
-    ["id", "name"],
-    [1, "timing1"],
-    [2, "timing2"]
-  ];
+  const timings = [createTimingValues(1, "timing1"), createTimingValues(2, "timing2")];
+  const sheetValues = createTimingSheet(timings);
   let actual: ReturnType<typeof spreadSheetDatastore.fetchTiming>;
   beforeAll(() => {
     getAllValuesRV = sheetValues;
@@ -209,20 +167,14 @@ describe("fetchTiming", () => {
     actual = spreadSheetDatastore.fetchTiming();
   });
   it("TimingValuesが件数分返却されること", () => {
-    const expected: ITimingValues[] = [
-      { id: 1, name: "timing1" },
-      { id: 2, name: "timing2" }
-    ];
+    const expected = timings;
     expect(actual).toEqual(expected);
   });
 });
 
 describe("fetchType", () => {
-  const sheetValues: Array<Array<string | number>> = [
-    ["id", "name"],
-    [1, "type1"],
-    [2, "type2"]
-  ];
+  const types = [createTypeValues(1, "type1"), createTypeValues(2, "type2")];
+  const sheetValues = createTypeSheet(types);
   let actual: ReturnType<typeof spreadSheetDatastore.fetchType>;
   beforeAll(() => {
     getAllValuesRV = sheetValues;
@@ -231,13 +183,11 @@ describe("fetchType", () => {
     actual = spreadSheetDatastore.fetchType();
   });
   it("TypeValuesが件数分返却されること", () => {
-    const expected: ITypeValues[] = [
-      { id: 1, name: "type1" },
-      { id: 2, name: "type2" }
-    ];
+    const expected = types;
     expect(actual).toEqual(expected);
   });
 });
+
 describe("updateIntakes", () => {
   let intakes: IIntakeValues[];
   beforeAll(() => {

@@ -1,5 +1,8 @@
 import { Datastore, DatastoreConfig } from "./Datastore";
 import { IIntakeValues } from "../model";
+export declare type IRowValues = Array<string | number>;
+export declare type IHeaderColums = Array<string>;
+export declare type ISheetValues = Array<IRowValues>;
 declare type SpreadSheetDatastoreConfig = {
     spreadSheetId: string;
 } & DatastoreConfig;
