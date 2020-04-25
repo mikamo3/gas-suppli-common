@@ -16,13 +16,13 @@ import {
 } from "model/index";
 import { MasterRepository } from "repository/index";
 import {
-  createIntake,
-  createMaker,
-  createSuppli,
-  createSuppliAmount,
-  createTiming,
-  createType
-} from "testhelper/model";
+  createIntakeValues,
+  createMakerValues,
+  createSuppliValues,
+  createSuppliAmountValues,
+  createTimingValues,
+  createTypeValues
+} from "test/index";
 import { mocked } from "ts-jest/utils";
 
 let masterRepository: MasterRepository;
@@ -59,9 +59,9 @@ describe("getTypes", () => {
   describe("複数件の場合", () => {
     beforeAll(() => {
       fetchTypeReturnValue = [
-        createType(1, "type1"),
-        createType(2, "type2"),
-        createType(3, "type3")
+        createTypeValues(1, "type1"),
+        createTypeValues(2, "type2"),
+        createTypeValues(3, "type3")
       ];
     });
     it("Typeが件数分返却されること", () => {
@@ -84,14 +84,18 @@ describe("getTypes", () => {
   describe("relationの確認", () => {
     beforeAll(() => {
       fetchTypeReturnValue = [
-        createType(1, "type1"),
-        createType(2, "type2"),
-        createType(3, "type3")
+        createTypeValues(1, "type1"),
+        createTypeValues(2, "type2"),
+        createTypeValues(3, "type3")
       ];
     });
     describe("supplis", () => {
       beforeAll(() => {
-        fetchSuppliReturnValue = [createSuppli(100, 1), createSuppli(101, 1), createSuppli(102, 3)];
+        fetchSuppliReturnValue = [
+          createSuppliValues(100, 1),
+          createSuppliValues(101, 1),
+          createSuppliValues(102, 3)
+        ];
       });
 
       it("Suppliが存在する場合はそれが返却されること", () => {
@@ -106,9 +110,9 @@ describe("getTypes", () => {
     describe("intakes", () => {
       beforeAll(() => {
         fetchIntakeReturnValue = [
-          createIntake(10, 10, 1, 5),
-          createIntake(11, 11, 1, 6),
-          createIntake(12, 12, 3, 7)
+          createIntakeValues(10, 10, 1, 5),
+          createIntakeValues(11, 11, 1, 6),
+          createIntakeValues(12, 12, 3, 7)
         ];
       });
 
@@ -132,8 +136,8 @@ describe("getSupplis", () => {
   let actual: Suppli[];
   beforeAll(() => {
     fetchSuppliReturnValue = [
-      createSuppli(1, 10, 100, "suppli1", 10, "unit1"),
-      createSuppli(2, 11, 101, "suppli2", 11, "unit2")
+      createSuppliValues(1, 10, 100, "suppli1", 10, "unit1"),
+      createSuppliValues(2, 11, 101, "suppli2", 11, "unit2")
     ];
   });
   beforeEach(() => {
@@ -166,13 +170,13 @@ describe("getSupplis", () => {
   describe("relationの確認", () => {
     beforeAll(() => {
       fetchSuppliReturnValue = [
-        createSuppli(1, 10, 100, "suppli1", 10, "unit1"),
-        createSuppli(2, 11, 101, "suppli2", 11, "unit2")
+        createSuppliValues(1, 10, 100, "suppli1", 10, "unit1"),
+        createSuppliValues(2, 11, 101, "suppli2", 11, "unit2")
       ];
     });
     describe("type", () => {
       beforeAll(() => {
-        fetchTypeReturnValue = [createType(10, "type1"), createType(12, "type2")];
+        fetchTypeReturnValue = [createTypeValues(10, "type1"), createTypeValues(12, "type2")];
       });
       it("Suppliが存在する場合はそれが返却されること", () => {
         expect(actual[0].type).toMatchObject(fetchTypeReturnValue[0]);
@@ -183,7 +187,7 @@ describe("getSupplis", () => {
     });
     describe("maker", () => {
       beforeAll(() => {
-        fetchMakerReturnValue = [createMaker(101), createMaker(102)];
+        fetchMakerReturnValue = [createMakerValues(101), createMakerValues(102)];
       });
       it("Makerが存在する場合はそれが返却されること", () => {
         expect(actual[1].maker).toMatchObject(fetchMakerReturnValue[0]);
@@ -195,9 +199,9 @@ describe("getSupplis", () => {
     describe("suppliAmounts", () => {
       beforeAll(() => {
         fetchSuppliAmountReturnValue = [
-          createSuppliAmount(1000, 1),
-          createSuppliAmount(1001, 1),
-          createSuppliAmount(1002, 3)
+          createSuppliAmountValues(1000, 1),
+          createSuppliAmountValues(1001, 1),
+          createSuppliAmountValues(1002, 3)
         ];
       });
       it("SuppliAmountsが存在する場合はそれが返却されること", () => {
@@ -226,9 +230,9 @@ describe("getMakers", () => {
   describe("複数件の場合", () => {
     beforeAll(() => {
       fetchMakerReturnValue = [
-        createMaker(1, "maker1"),
-        createMaker(2, "maker2"),
-        createMaker(3, "maker3")
+        createMakerValues(1, "maker1"),
+        createMakerValues(2, "maker2"),
+        createMakerValues(3, "maker3")
       ];
     });
     it("Makerが件数分返却されること", () => {
@@ -251,14 +255,14 @@ describe("getMakers", () => {
   describe("relationの確認", () => {
     beforeAll(() => {
       fetchMakerReturnValue = [
-        createMaker(1, "maker1"),
-        createMaker(2, "maker2"),
-        createMaker(3, "maker3")
+        createMakerValues(1, "maker1"),
+        createMakerValues(2, "maker2"),
+        createMakerValues(3, "maker3")
       ];
       fetchSuppliReturnValue = [
-        createSuppli(100, 10, 1),
-        createSuppli(101, 10, 1),
-        createSuppli(102, 10, 3)
+        createSuppliValues(100, 10, 1),
+        createSuppliValues(101, 10, 1),
+        createSuppliValues(102, 10, 3)
       ];
     });
 
@@ -279,9 +283,9 @@ describe("getSuppliAmounts", () => {
   let actual: SuppliAmount[];
   beforeAll(() => {
     fetchSuppliAmountsReturnValue = [
-      createSuppliAmount(1, 11, 101),
-      createSuppliAmount(2, 12, 102),
-      createSuppliAmount(3, 13, 103)
+      createSuppliAmountValues(1, 11, 101),
+      createSuppliAmountValues(2, 12, 102),
+      createSuppliAmountValues(3, 13, 103)
     ];
   });
   beforeEach(() => {
@@ -309,8 +313,11 @@ describe("getSuppliAmounts", () => {
   });
   describe("relationの確認", () => {
     beforeAll(() => {
-      fetchSuppliAmountsReturnValue = [createSuppliAmount(1, 10), createSuppliAmount(2, 11)];
-      fetchSuppliReturnValue = [createSuppli(10)];
+      fetchSuppliAmountsReturnValue = [
+        createSuppliAmountValues(1, 10),
+        createSuppliAmountValues(2, 11)
+      ];
+      fetchSuppliReturnValue = [createSuppliValues(10)];
     });
     it("Suppliが存在する場合はそれが返却されること", () => {
       expect(actual[0].suppli.id).toEqual(10);
@@ -357,8 +364,8 @@ describe("getTimings", () => {
   });
   describe("relationの確認", () => {
     beforeAll(() => {
-      fetchTimingReturnValue = [createTiming(1), createTiming(2)];
-      fetchIntakeReturnValue = [createIntake(10, 1), createIntake(11, 1)];
+      fetchTimingReturnValue = [createTimingValues(1), createTimingValues(2)];
+      fetchIntakeReturnValue = [createIntakeValues(10, 1), createIntakeValues(11, 1)];
     });
     it("Intakeが存在する場合はそれが返却されること", () => {
       expect(actual[0].intakes[0].id).toEqual(10);
@@ -377,9 +384,9 @@ describe("getIntakes", () => {
   let actual: Intake[];
   beforeAll(() => {
     fetchIntakeReturnValue = [
-      createIntake(1, 10, 100, 5),
-      createIntake(2, 11, 101, 6),
-      createIntake(2, 12, 102, 6)
+      createIntakeValues(1, 10, 100, 5),
+      createIntakeValues(2, 11, 101, 6),
+      createIntakeValues(2, 12, 102, 6)
     ];
   });
   beforeEach(() => {
@@ -408,14 +415,14 @@ describe("getIntakes", () => {
   describe("relationの確認", () => {
     beforeAll(() => {
       fetchIntakeReturnValue = [
-        createIntake(1, 10, 100),
-        createIntake(2, 10, 102),
-        createIntake(3, 12, 102)
+        createIntakeValues(1, 10, 100),
+        createIntakeValues(2, 10, 102),
+        createIntakeValues(3, 12, 102)
       ];
     });
     describe("timing", () => {
       beforeAll(() => {
-        fetchTimingReturnValue = [createTiming(10), createTiming(11)];
+        fetchTimingReturnValue = [createTimingValues(10), createTimingValues(11)];
       });
       it("Timingが存在する場合はそれが返却されること", () => {
         expect(actual[0].timing.id).toEqual(10);
@@ -426,7 +433,7 @@ describe("getIntakes", () => {
     });
     describe("type", () => {
       beforeAll(() => {
-        fetchTypeReturnValue = [createType(101), createType(102)];
+        fetchTypeReturnValue = [createTypeValues(101), createTypeValues(102)];
       });
       it("Typeが存在する場合はそれが返却されること", () => {
         expect(actual[1].type.id).toEqual(102);

@@ -10,7 +10,7 @@ import {
 } from "model/index";
 
 import { mocked } from "ts-jest/utils";
-import { createIntake } from "testhelper/model";
+import { createIntakeValues } from "test/index";
 
 jest.mock("gas-lib");
 
@@ -258,9 +258,9 @@ describe("updateIntakes", () => {
   describe("任意の値が指定された場合", () => {
     beforeAll(() => {
       intakes = [
-        createIntake(1, 10, 30, 5),
-        createIntake(2, 11, 31, 6),
-        createIntake(3, 12, 32, 7)
+        createIntakeValues(1, 10, 30, 5),
+        createIntakeValues(2, 11, 31, 6),
+        createIntakeValues(3, 12, 32, 7)
       ];
     });
     it("件数分データが追加されること", () => {

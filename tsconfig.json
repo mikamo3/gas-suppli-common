@@ -13,7 +13,7 @@
       "constant/*": ["src/constant/*"],
       "env/*": ["src/env/*"],
       "mocks/*": ["__mocks__/*"],
-      "testhelper/*": ["__testhelper__/*"]
+      "test/*": ["src/test/*"]
     },
     "moduleResolution": "Node",
     "skipLibCheck": true,

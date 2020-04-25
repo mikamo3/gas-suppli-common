@@ -1,19 +1,20 @@
-import { testMasterRepository, assert } from "./common";
-import { setTestdata } from "../spreadsheet";
-import { IIntakeValues, env } from "../../../src";
+import { IIntakeValues, env, PropertyNames } from "../../../src/index";
+import { Test, TestSpreadsheetHelper, assert } from "gas-lib/test";
 
-export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
-  testMasterRepository(
+export default () => {
+  const masterSpreadsheet = SpreadsheetApp.openById(
+    PropertiesService.getScriptProperties().getProperty(PropertyNames.mastersheetId)
+  );
+  Test.run(
     "updateIntakes",
-    spreadSheet,
-    spreadsheet => {
+    () => {
       const intakeValues = [
         ["id", "timingId", "typeId", "serving"],
         [1, 10, 100, 0.1],
         [2, 11, 101, 0.2]
       ];
 
-      setTestdata(spreadsheet, "intake", intakeValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "intake", intakeValues);
     },
     () => {
       const assertReturnValue = (actual: Array<object>, expected: Array<object>) => {

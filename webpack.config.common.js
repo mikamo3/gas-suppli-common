@@ -17,7 +17,7 @@ module.exports = {
     extensions: [".ts", ".js"],
     alias: {
       model: path.resolve(__dirname, "./src/model"),
-      testhelper: path.resolve(__dirname, "./__testhelper__"),
+      test: path.resolve(__dirname, "./src/test"),
       datastore: path.resolve(__dirname, "./src/datastore"),
       repository: path.resolve(__dirname, "./src/repository"),
       constant: path.resolve(__dirname, "./src/constant"),

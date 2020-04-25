@@ -1,12 +1,13 @@
-import { ISuppliValues, env } from "../../../src/index";
-import { setTestdata } from "../spreadsheet";
-import { assert, testMasterRepository } from "./common";
+import { ISuppliValues, env, PropertyNames } from "../../../src/index";
+import { Test, assert, TestSpreadsheetHelper } from "gas-lib/test";
 
-export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
-  testMasterRepository(
+export default () => {
+  const masterSpreadsheet = SpreadsheetApp.openById(
+    PropertiesService.getScriptProperties().getProperty(PropertyNames.mastersheetId)
+  );
+  Test.run(
     "relation type",
-    spreadSheet,
-    spreadsheet => {
+    () => {
       const typeIdBase = 1;
       const typeValues = [
         ["id", "name"],
@@ -19,8 +20,8 @@ export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
         [suppliIdBase, typeIdBase, 100, "suppli1", 10, "unit1"],
         [suppliIdBase + 1, typeIdBase, 101, "suppli2", 11, "unit2"]
       ];
-      setTestdata(spreadsheet, "type", typeValues);
-      setTestdata(spreadsheet, "suppli", suppliValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "type", typeValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "suppli", suppliValues);
     },
     () => {
       const repository = env.getMasterRepository();

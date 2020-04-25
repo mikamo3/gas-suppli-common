@@ -5,15 +5,17 @@ import {
   ISuppliValues,
   ISuppliAmountValues,
   IIntakeValues,
-  env
+  env,
+  PropertyNames
 } from "../../../src/index";
-import { setTestdata } from "../spreadsheet";
-import { assert, testMasterRepository } from "./common";
-export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
-  testMasterRepository(
+import { Test, TestSpreadsheetHelper, assert } from "gas-lib/test";
+export default () => {
+  const masterSpreadsheet = SpreadsheetApp.openById(
+    PropertiesService.getScriptProperties().getProperty(PropertyNames.mastersheetId)
+  );
+  Test.run(
     "masterData",
-    spreadSheet,
-    spreadsheet => {
+    () => {
       const typeValues = [
         ["id", "name"],
         [1, "type1"],
@@ -47,12 +49,12 @@ export default (spreadSheet: GoogleAppsScript.Spreadsheet.Spreadsheet) => {
         [2, 11, 101, 0.2]
       ];
 
-      setTestdata(spreadsheet, "type", typeValues);
-      setTestdata(spreadsheet, "timing", timingValues);
-      setTestdata(spreadsheet, "maker", makerValues);
-      setTestdata(spreadsheet, "suppli", suppliValues);
-      setTestdata(spreadsheet, "suppliAmount", suppliAmountValues);
-      setTestdata(spreadsheet, "intake", intakeValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "type", typeValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "timing", timingValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "maker", makerValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "suppli", suppliValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "suppliAmount", suppliAmountValues);
+      TestSpreadsheetHelper.setTestdata(masterSpreadsheet, "intake", intakeValues);
     },
     () => {
       const assertReturnValue = (actual: Array<object>, expected: Array<object>) => {

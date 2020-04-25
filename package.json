@@ -70,7 +70,7 @@
     "moduleNameMapper": {
       "model/(.*)$": "<rootDir>/src/model/$1",
       "mocks/(.*)$": "<rootDir>/__mocks__/$1",
-      "testhelper/(.*)$": "<rootDir>/__testhelper__/$1",
+      "test/(.*)$": "<rootDir>/src/test/$1",
       "datastore/(.*)$": "<rootDir>/src/datastore/$1",
       "repository/(.*)$": "<rootDir>/src/repository/$1",
       "env/(.*)$": "<rootDir>/src/env/$1",
