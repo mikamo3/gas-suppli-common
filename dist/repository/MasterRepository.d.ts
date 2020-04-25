@@ -1,5 +1,5 @@
 import { Datastore } from "../datastore/Datastore";
-import { Type, Suppli, Maker, SuppliAmount, Timing, Intake, IMakerValues, ISuppliValues, ISuppliAmountValues, IIntakeValues, ITimingValues, ITypeValues } from "../model/index";
+import { Form, IFormValues, IIntakeValues, IMakerValues, Intake, ISuppliAmountValues, ISuppliValues, ITimingValues, ITypeValues, Maker, Suppli, SuppliAmount, Timing, Type } from "../model/index";
 export declare class MasterRepository {
     datastore: Datastore;
     constructor(datastore: Datastore);
@@ -16,8 +16,10 @@ export declare class MasterRepository {
     getTimings(): Timing[];
     getTimingById(id: number): Timing;
     getIntakes(): Intake[];
+    getIntakeById(id: number): Intake;
     getIntakesByTypeId(typeId: number): Intake[];
     getIntakesByTimingId(timingId: number): Intake[];
+    getForms(): Form[];
     updateIntakes(intakes: Array<Intake | IIntakeValues>): void;
     createType(type: ITypeValues): Type;
     createSuppli(suppli: ISuppliValues): Suppli;
@@ -25,4 +27,5 @@ export declare class MasterRepository {
     createSuppliAmounts(suppliAmount: ISuppliAmountValues): SuppliAmount;
     createTiming(timing: ITimingValues): Timing;
     createIntake(intake: IIntakeValues): Intake;
+    createForm(form: IFormValues): Form;
 }

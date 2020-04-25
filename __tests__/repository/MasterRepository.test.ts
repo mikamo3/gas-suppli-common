@@ -12,7 +12,9 @@ import {
   Suppli,
   SuppliAmount,
   Timing,
-  Type
+  Type,
+  Form,
+  IFormValues
 } from "model/index";
 import { MasterRepository } from "repository/index";
 import {
@@ -21,7 +23,9 @@ import {
   createSuppliValues,
   createSuppliAmountValues,
   createTimingValues,
-  createTypeValues
+  createTypeValues,
+  createIntake,
+  createFormValues
 } from "test/index";
 import { mocked } from "ts-jest/utils";
 
@@ -34,6 +38,7 @@ jest.spyOn(DummyDatastore.prototype, "fetchIntake");
 jest.spyOn(DummyDatastore.prototype, "fetchSuppliAmount");
 jest.spyOn(DummyDatastore.prototype, "fetchMaker");
 jest.spyOn(DummyDatastore.prototype, "fetchTiming");
+jest.spyOn(DummyDatastore.prototype, "fetchForm");
 jest.spyOn(DummyDatastore.prototype, "updateIntakes");
 
 beforeEach(() => {
@@ -439,12 +444,59 @@ describe("getIntakes", () => {
         expect(actual[1].type.id).toEqual(102);
         expect(actual[2].type.id).toEqual(102);
       });
-      it("Timingが存在しない場合は空配列が返却されること", () => {
+      it("Timingが存在しない場合はundefinedが返却されること", () => {
         expect(actual[0].type).toBeUndefined();
       });
     });
   });
 });
+
+describe("getForms", () => {
+  let actual: Form[];
+  let fetchFormRV: IFormValues[];
+  let fetchIntakeRV: IIntakeValues[];
+  beforeAll(() => {
+    fetchFormRV = [];
+    fetchIntakeRV = [];
+  });
+  beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchForm).mockReturnValue(fetchFormRV);
+    mocked(DummyDatastore.prototype.fetchIntake).mockReturnValue(fetchIntakeRV);
+    actual = masterRepository.getForms();
+  });
+  describe("存在する場合", () => {
+    beforeAll(() => {
+      fetchFormRV = [createFormValues(), createFormValues()];
+    });
+    it("Formが件数分返却されること", () => {
+      expect(actual).toHaveLength(2);
+    });
+  });
+  describe("存在しない場合", () => {
+    beforeAll(() => {
+      fetchFormRV = [];
+    });
+    it("空配列が返却されること", () => {
+      expect(actual).toEqual([]);
+    });
+  });
+  describe("relationの確認", () => {
+    beforeAll(() => {
+      fetchFormRV = [createFormValues(1, 101), createFormValues(2, 102), createFormValues(3, 103)];
+      fetchIntakeRV = [createIntakeValues(102), createIntakeValues(103)];
+    });
+    describe("intake", () => {
+      it("Intakeが存在する場合はそれが返却されること", () => {
+        expect(actual[1].intake.id).toEqual(102);
+        expect(actual[2].intake.id).toEqual(103);
+      });
+      it("Intakeが存在しない場合はundefinedが返却されること", () => {
+        expect(actual[0].intake).toBeUndefined();
+      });
+    });
+  });
+});
+
 describe("updateIntakes", () => {
   let intakes: Array<Intake | IIntakeValues>;
   beforeEach(() => {
@@ -460,22 +512,11 @@ describe("updateIntakes", () => {
   });
   describe("複数のIntakeが指定されたとき", () => {
     const intakeValues: IIntakeValues[] = [
-      { id: 1, timingId: 10, typeId: 100, serving: 5 },
-      { id: 2, timingId: 11, typeId: 101, serving: 6 }
+      createIntakeValues(1, 10, 100, 5),
+      createIntakeValues(2, 11, 101, 6)
     ];
     beforeAll(() => {
-      intakes = [
-        new Intake(
-          intakeValues[0],
-          () => masterRepository.getTimingById(1),
-          () => masterRepository.getTypeById(1)
-        ),
-        new Intake(
-          intakeValues[1],
-          () => masterRepository.getTimingById(1),
-          () => masterRepository.getTypeById(1)
-        )
-      ];
+      intakes = [createIntake(1, 10, 100, 5), createIntake(2, 11, 101, 6)];
     });
     it("datastore.updateIntakesが期待したパラメータで呼び出されること", () => {
       const expected = intakeValues;
@@ -488,14 +529,7 @@ describe("updateIntakes", () => {
       { id: 2, timingId: 11, typeId: 101, serving: 6 }
     ];
     beforeAll(() => {
-      intakes = [
-        new Intake(
-          intakeValues[0],
-          () => masterRepository.getTimingById(1),
-          () => masterRepository.getTypeById(1)
-        ),
-        intakeValues[1]
-      ];
+      intakes = [createIntake(1, 10, 100, 5), intakeValues[1]];
     });
     it("datastore.updateIntakesが期待したパラメータで呼び出されること", () => {
       const expected = intakeValues;

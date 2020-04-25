@@ -10,7 +10,9 @@ import {
   Timing,
   ITypeValues,
   ITimingValues,
-  Type
+  IFormValues,
+  Type,
+  Form
 } from "model/index";
 import { ISheetValues, IRowValues } from "datastore/index";
 
@@ -63,4 +65,11 @@ export const createTimingSheet = (timings: Array<Timing | ITimingValues>): IShee
 
 export const createTypeSheet = (types: Array<Type | ITypeValues>): ISheetValues => {
   return [["id", "name"], ...types.map<IRowValues>(type => [type.id, type.name])];
+};
+
+export const createFormSheet = (forms: Array<Form | IFormValues>) => {
+  return [
+    ["id", "intakeId", "formId"],
+    ...forms.map<IRowValues>(form => [form.id, form.intakeId, form.formId])
+  ];
 };

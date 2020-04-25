@@ -10,7 +10,9 @@ import {
   Intake,
   Maker,
   SuppliAmount,
-  Timing
+  Timing,
+  IFormValues,
+  Form
 } from "model/index";
 
 export const createIntakeValues = (
@@ -90,3 +92,11 @@ export const createType = (id = 1, name = "type"): Type =>
     () => [],
     () => []
   );
+
+export const createFormValues = (id = 1, intakeId = 10, formId = "id"): IFormValues => ({
+  id,
+  intakeId,
+  formId
+});
+export const createForm = (id = 1, intakeId = 10, formId = "id") =>
+  new Form(createFormValues(id, intakeId, formId), () => undefined);

@@ -34,6 +34,9 @@ var SpreadSheetDatastore = /** @class */ (function () {
     SpreadSheetDatastore.prototype.fetchType = function () {
         return this.fetch("type");
     };
+    SpreadSheetDatastore.prototype.fetchForm = function () {
+        return this.fetch("form");
+    };
     SpreadSheetDatastore.prototype.fetch = function (sheetName) {
         if (!(sheetName in this.sheetValues)) {
             var sheetValues = this.spreadSheet.getAllValues(sheetName);

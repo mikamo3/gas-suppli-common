@@ -1,18 +1,20 @@
-import { Datastore } from "../datastore/Datastore";
 import { filter, find } from "underscore";
+import { Datastore } from "../datastore/Datastore";
 import {
-  Type,
-  Suppli,
+  Form,
+  IFormValues,
+  IIntakeValues,
+  IMakerValues,
+  Intake,
+  ISuppliAmountValues,
+  ISuppliValues,
+  ITimingValues,
+  ITypeValues,
   Maker,
+  Suppli,
   SuppliAmount,
   Timing,
-  Intake,
-  IMakerValues,
-  ISuppliValues,
-  ISuppliAmountValues,
-  IIntakeValues,
-  ITimingValues,
-  ITypeValues
+  Type
 } from "../model/index";
 export class MasterRepository {
   datastore: Datastore;
@@ -97,6 +99,14 @@ export class MasterRepository {
     const intakes = this.datastore.fetchIntake();
     return intakes.map<Intake>(i => this.createIntake(i));
   }
+  getIntakeById(id: number) {
+    const intakes = this.datastore.fetchIntake();
+    const fIntake = find(intakes, i => i.id === id);
+    if (!fIntake) {
+      return undefined;
+    }
+    return this.createIntake(fIntake);
+  }
   getIntakesByTypeId(typeId: number) {
     const intakes = this.datastore.fetchIntake();
     return filter(intakes, i => i.typeId === typeId).map<Intake>(i => this.createIntake(i));
@@ -104,6 +114,11 @@ export class MasterRepository {
   getIntakesByTimingId(timingId: number) {
     const intakes = this.datastore.fetchIntake();
     return filter(intakes, i => i.timingId === timingId).map<Intake>(i => this.createIntake(i));
+  }
+
+  getForms() {
+    const forms = this.datastore.fetchForm();
+    return forms.map<Form>(f => this.createForm(f));
   }
 
   updateIntakes(intakes: Array<Intake | IIntakeValues>) {
@@ -150,5 +165,8 @@ export class MasterRepository {
       () => this.getTimingById(intake.timingId),
       () => this.getTypeById(intake.typeId)
     );
+  }
+  createForm(form: IFormValues) {
+    return new Form(form, () => this.getIntakeById(form.intakeId));
   }
 }

@@ -87,6 +87,14 @@ var MasterRepository = /** @class */ (function () {
         var intakes = this.datastore.fetchIntake();
         return intakes.map(function (i) { return _this.createIntake(i); });
     };
+    MasterRepository.prototype.getIntakeById = function (id) {
+        var intakes = this.datastore.fetchIntake();
+        var fIntake = underscore_1.find(intakes, function (i) { return i.id === id; });
+        if (!fIntake) {
+            return undefined;
+        }
+        return this.createIntake(fIntake);
+    };
     MasterRepository.prototype.getIntakesByTypeId = function (typeId) {
         var _this = this;
         var intakes = this.datastore.fetchIntake();
@@ -96,6 +104,11 @@ var MasterRepository = /** @class */ (function () {
         var _this = this;
         var intakes = this.datastore.fetchIntake();
         return underscore_1.filter(intakes, function (i) { return i.timingId === timingId; }).map(function (i) { return _this.createIntake(i); });
+    };
+    MasterRepository.prototype.getForms = function () {
+        var _this = this;
+        var forms = this.datastore.fetchForm();
+        return forms.map(function (f) { return _this.createForm(f); });
     };
     MasterRepository.prototype.updateIntakes = function (intakes) {
         var intakeValues = intakes.map(function (i) {
@@ -134,6 +147,10 @@ var MasterRepository = /** @class */ (function () {
     MasterRepository.prototype.createIntake = function (intake) {
         var _this = this;
         return new index_1.Intake(intake, function () { return _this.getTimingById(intake.timingId); }, function () { return _this.getTypeById(intake.typeId); });
+    };
+    MasterRepository.prototype.createForm = function (form) {
+        var _this = this;
+        return new index_1.Form(form, function () { return _this.getIntakeById(form.intakeId); });
     };
     return MasterRepository;
 }());

@@ -1,4 +1,4 @@
-import { ITypeValues, ISuppliValues, ISuppliAmountValues, IMakerValues, ITimingValues, IIntakeValues } from "../model/index";
+import { ITypeValues, ISuppliValues, ISuppliAmountValues, IMakerValues, ITimingValues, IIntakeValues, IFormValues } from "../model/index";
 export interface Datastore {
     fetchType: () => ITypeValues[];
     fetchSuppli: () => ISuppliValues[];
@@ -6,6 +6,7 @@ export interface Datastore {
     fetchMaker: () => IMakerValues[];
     fetchTiming: () => ITimingValues[];
     fetchIntake: () => IIntakeValues[];
+    fetchForm: () => IFormValues[];
     updateIntakes: (intakes: IIntakeValues[]) => void;
 }
 export interface DatastoreConstructor {

@@ -23,6 +23,9 @@ var DummyDatastore = /** @class */ (function () {
     DummyDatastore.prototype.fetchType = function () {
         return [];
     };
+    DummyDatastore.prototype.fetchForm = function () {
+        return [];
+    };
     DummyDatastore.prototype.updateIntakes = function () {
         //do nothing
     };

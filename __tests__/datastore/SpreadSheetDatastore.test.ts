@@ -1,6 +1,6 @@
 import { SpreadSheetDatastore } from "datastore/index";
 import { Spreadsheet } from "gas-lib";
-import { IIntakeValues } from "model/index";
+import { IIntakeValues, IFormValues } from "model/index";
 
 import { mocked } from "ts-jest/utils";
 import {
@@ -16,7 +16,9 @@ import {
   createTimingValues,
   createTimingSheet,
   createTypeValues,
-  createTypeSheet
+  createTypeSheet,
+  createFormValues,
+  createFormSheet
 } from "test/index";
 
 jest.mock("gas-lib");
@@ -184,6 +186,21 @@ describe("fetchType", () => {
   });
   it("TypeValuesが件数分返却されること", () => {
     const expected = types;
+    expect(actual).toEqual(expected);
+  });
+});
+describe("fetchForm", () => {
+  const forms = [createFormValues(1, 10, "formId1"), createFormValues(2, 20, "formId2")];
+  const sheetValues = createFormSheet(forms);
+  let actual: IFormValues[];
+  beforeAll(() => {
+    getAllValuesRV = sheetValues;
+  });
+  beforeEach(() => {
+    actual = spreadSheetDatastore.fetchForm();
+  });
+  it("Formが件数分返却されること", () => {
+    const expected = forms;
     expect(actual).toEqual(expected);
   });
 });
