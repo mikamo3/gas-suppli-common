@@ -45,7 +45,7 @@ exports.createSuppliValues = function (id, typeId, makerId, name, amountPerServi
     if (servingUnit === void 0) { servingUnit = "unit"; }
     return ({ id: id, typeId: typeId, makerId: makerId, name: name, amountPerServing: amountPerServing, servingUnit: servingUnit });
 };
-exports.createSuppli = function (id, typeId, makerId, name, amountPerServing, servingUnit, getType, getTiming, getSuppliAmounts) {
+exports.createSuppli = function (id, typeId, makerId, name, amountPerServing, servingUnit, getType, getMaker, getSuppliAmounts) {
     if (id === void 0) { id = 1; }
     if (typeId === void 0) { typeId = 10; }
     if (makerId === void 0) { makerId = 100; }
@@ -53,9 +53,9 @@ exports.createSuppli = function (id, typeId, makerId, name, amountPerServing, se
     if (amountPerServing === void 0) { amountPerServing = 999; }
     if (servingUnit === void 0) { servingUnit = "unit"; }
     if (getType === void 0) { getType = function () { return undefined; }; }
-    if (getTiming === void 0) { getTiming = function () { return undefined; }; }
+    if (getMaker === void 0) { getMaker = function () { return undefined; }; }
     if (getSuppliAmounts === void 0) { getSuppliAmounts = function () { return []; }; }
-    return new index_1.Suppli(exports.createSuppliValues(id, typeId, makerId, name, amountPerServing, servingUnit), getType, getTiming, getSuppliAmounts);
+    return new index_1.Suppli(exports.createSuppliValues(id, typeId, makerId, name, amountPerServing, servingUnit), getType, getMaker, getSuppliAmounts);
 };
 exports.createSuppliAmountValues = function (id, suppliId, amount) {
     if (id === void 0) { id = 0; }

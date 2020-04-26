@@ -41,7 +41,7 @@ export const createMakerValues = (id = 1, name = "type"): IMakerValues => ({
   name
 });
 
-export const createMaker = (id = 1, name = "type", getSupplis = () => []) =>
+export const createMaker = (id = 1, name = "type", getSupplis: () => Suppli[] = () => []) =>
   new Maker(createMakerValues(id, name), getSupplis);
 
 export const createSuppliValues = (
@@ -59,14 +59,14 @@ export const createSuppli = (
   name = "suppli",
   amountPerServing = 999,
   servingUnit = "unit",
-  getType = () => undefined,
-  getTiming = () => undefined,
-  getSuppliAmounts = () => []
+  getType: () => Type = () => undefined,
+  getMaker: () => Maker = () => undefined,
+  getSuppliAmounts: () => SuppliAmount[] = () => []
 ) =>
   new Suppli(
     createSuppliValues(id, typeId, makerId, name, amountPerServing, servingUnit),
     getType,
-    getTiming,
+    getMaker,
     getSuppliAmounts
   );
 
@@ -84,11 +84,11 @@ export const createSuppliAmount = (
   id = 0,
   suppliId = 10,
   amount = 100,
-  getSuppli = () => undefined
+  getSuppli: () => Suppli = () => undefined
 ) => new SuppliAmount(createSuppliAmountValues(id, suppliId, amount), getSuppli);
 
 export const createTimingValues = (id = 1, name = "timing"): ITimingValues => ({ id, name });
-export const createTiming = (id = 1, name = "timing", getIntakes = () => []) =>
+export const createTiming = (id = 1, name = "timing", getIntakes: () => Intake[] = () => []) =>
   new Timing(createTimingValues(id, name), getIntakes);
 
 export const createTypeValues = (id = 1, name = "type"): ITypeValues => ({
@@ -98,8 +98,8 @@ export const createTypeValues = (id = 1, name = "type"): ITypeValues => ({
 export const createType = (
   id = 1,
   name = "type",
-  getSupplis = () => [],
-  getIntakes = () => []
+  getSupplis: () => Suppli[] = () => [],
+  getIntakes: () => Intake[] = () => []
 ): Type => new Type(createTypeValues(id, name), getSupplis, getIntakes);
 
 export const createFormValues = (id = 1, intakeId = 10, formId = "id"): IFormValues => ({
