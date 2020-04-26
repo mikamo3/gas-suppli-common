@@ -27,20 +27,22 @@ export const createIntakeValues = (
   serving
 });
 
-export const createIntake = (id = 1, timingId = 10, typeId = 100, serving = 5) =>
-  new Intake(
-    createIntakeValues(id, timingId, typeId, serving),
-    () => undefined,
-    () => undefined
-  );
+export const createIntake = (
+  id = 1,
+  timingId = 10,
+  typeId = 100,
+  serving = 5,
+  getTiming = () => undefined,
+  getServing = () => undefined
+) => new Intake(createIntakeValues(id, timingId, typeId, serving), getTiming, getServing);
 
 export const createMakerValues = (id = 1, name = "type"): IMakerValues => ({
   id,
   name
 });
 
-export const createMaker = (id = 1, name = "type") =>
-  new Maker(createMakerValues(id, name), () => []);
+export const createMaker = (id = 1, name = "type", getSupplis = () => []) =>
+  new Maker(createMakerValues(id, name), getSupplis);
 
 export const createSuppliValues = (
   id = 1,
@@ -56,13 +58,16 @@ export const createSuppli = (
   makerId = 100,
   name = "suppli",
   amountPerServing = 999,
-  servingUnit = "unit"
+  servingUnit = "unit",
+  getType = () => undefined,
+  getTiming = () => undefined,
+  getSuppliAmounts = () => []
 ) =>
   new Suppli(
     createSuppliValues(id, typeId, makerId, name, amountPerServing, servingUnit),
-    () => undefined,
-    () => undefined,
-    () => []
+    getType,
+    getTiming,
+    getSuppliAmounts
   );
 
 export const createSuppliAmountValues = (
@@ -75,23 +80,27 @@ export const createSuppliAmountValues = (
   amount
 });
 
-export const createSuppliAmount = (id = 0, suppliId = 10, amount = 100) =>
-  new SuppliAmount(createSuppliAmountValues(id, suppliId, amount), () => undefined);
+export const createSuppliAmount = (
+  id = 0,
+  suppliId = 10,
+  amount = 100,
+  getSuppli = () => undefined
+) => new SuppliAmount(createSuppliAmountValues(id, suppliId, amount), getSuppli);
 
 export const createTimingValues = (id = 1, name = "timing"): ITimingValues => ({ id, name });
-export const createTiming = (id = 1, name = "timing") =>
-  new Timing(createTimingValues(id, name), () => []);
+export const createTiming = (id = 1, name = "timing", getIntakes = () => []) =>
+  new Timing(createTimingValues(id, name), getIntakes);
 
 export const createTypeValues = (id = 1, name = "type"): ITypeValues => ({
   id,
   name
 });
-export const createType = (id = 1, name = "type"): Type =>
-  new Type(
-    createTypeValues(id, name),
-    () => [],
-    () => []
-  );
+export const createType = (
+  id = 1,
+  name = "type",
+  getSupplis = () => [],
+  getIntakes = () => []
+): Type => new Type(createTypeValues(id, name), getSupplis, getIntakes);
 
 export const createFormValues = (id = 1, intakeId = 10, formId = "id"): IFormValues => ({
   id,
