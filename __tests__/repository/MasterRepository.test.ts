@@ -25,9 +25,12 @@ import {
   createTimingValues,
   createTypeValues,
   createIntake,
-  createFormValues
+  createFormValues,
+  createIntakeDetailValues,
+  createIntakeDetail
 } from "test/index";
 import { mocked } from "ts-jest/utils";
+import { IntakeDetail, IIntakeDetailValues } from "model/IntakeDetail";
 
 let masterRepository: MasterRepository;
 let datastore: Datastore;
@@ -40,6 +43,7 @@ jest.spyOn(DummyDatastore.prototype, "fetchMaker");
 jest.spyOn(DummyDatastore.prototype, "fetchTiming");
 jest.spyOn(DummyDatastore.prototype, "fetchForm");
 jest.spyOn(DummyDatastore.prototype, "updateIntakes");
+jest.spyOn(DummyDatastore.prototype, "addIntakeDetails");
 
 beforeEach(() => {
   datastore = new DummyDatastore({});
@@ -534,6 +538,36 @@ describe("updateIntakes", () => {
     it("datastore.updateIntakesが期待したパラメータで呼び出されること", () => {
       const expected = intakeValues;
       expect(DummyDatastore.prototype.updateIntakes).toBeCalledWith(expected);
+    });
+  });
+});
+describe("addIntakeDetails", () => {
+  let intakeDetails: Array<IIntakeDetailValues | IntakeDetail>;
+  beforeAll(() => {
+    intakeDetails = [];
+  });
+  beforeEach(() => {
+    jest.spyOn(global, "Date");
+    masterRepository.addIntakeDetails(intakeDetails);
+  });
+  describe("空の配列が渡されたとき", () => {
+    beforeAll(() => {
+      intakeDetails = [];
+    });
+    it("空配列が登録されること", () => {
+      expect(DummyDatastore.prototype.addIntakeDetails).toBeCalledWith([]);
+    });
+  });
+  describe("IntakeDetail,IIntakeDetailValuesが渡されたとき", () => {
+    beforeAll(() => {
+      intakeDetails = [
+        createIntakeDetailValues(new Date(), 1, 10, 100),
+        createIntakeDetail(new Date(), 2, 20, 200)
+      ];
+    });
+    it("IntakeDetailはIIntakeDetailValuesに変換されて登録されること", () => {
+      const expected = [intakeDetails[0], createIntakeDetailValues(new Date(), 2, 20, 200)];
+      expect(DummyDatastore.prototype.addIntakeDetails).toBeCalledWith(expected);
     });
   });
 });

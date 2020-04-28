@@ -29,6 +29,9 @@ var DummyDatastore = /** @class */ (function () {
     DummyDatastore.prototype.updateIntakes = function () {
         //do nothing
     };
+    DummyDatastore.prototype.addIntakeDetails = function () {
+        //do nothing
+    };
     return DummyDatastore;
 }());
 exports.DummyDatastore = DummyDatastore;

@@ -8,6 +8,12 @@ var intakeColumnPosition = {
     typeId: 2,
     serving: 3
 };
+var intakeDatailColumPosition = {
+    date: 0,
+    timingId: 1,
+    suppliId: 2,
+    serving: 3
+};
 var SpreadSheetDatastore = /** @class */ (function () {
     function SpreadSheetDatastore(configure) {
         this.sheetValues = {};
@@ -75,6 +81,17 @@ var SpreadSheetDatastore = /** @class */ (function () {
             return intakeRow;
         });
         this.spreadSheet.replace("intake", intakeArray, 1);
+    };
+    SpreadSheetDatastore.prototype.addIntakeDetails = function (intakeDetails) {
+        var intakeDetailArray = intakeDetails.map(function (id) {
+            var row = [];
+            for (var position in intakeDatailColumPosition) {
+                row[intakeDatailColumPosition[position]] = id[position];
+            }
+            row[0] = id.date.toISOString();
+            return row;
+        });
+        this.spreadSheet.add("intakeDetail", intakeDetailArray);
     };
     return SpreadSheetDatastore;
 }());

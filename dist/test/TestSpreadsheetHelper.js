@@ -52,4 +52,12 @@ exports.createFormSheet = function (forms) {
         ["id", "intakeId", "formId"]
     ], forms.map(function (form) { return [form.id, form.intakeId, form.formId]; }));
 };
+exports.createIntakeDetailSheet = function (intakeDetails) {
+    return __spreadArrays(intakeDetails.map(function (intakeDetail) { return [
+        intakeDetail.date.toISOString(),
+        intakeDetail.timingId,
+        intakeDetail.suppliId,
+        intakeDetail.serving
+    ]; }));
+};
 //# sourceMappingURL=TestSpreadsheetHelper.js.map

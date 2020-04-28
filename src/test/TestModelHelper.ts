@@ -12,7 +12,9 @@ import {
   SuppliAmount,
   Timing,
   IFormValues,
-  Form
+  Form,
+  IIntakeDetailValues,
+  IntakeDetail
 } from "model/index";
 
 export const createIntakeValues = (
@@ -32,9 +34,9 @@ export const createIntake = (
   timingId = 10,
   typeId = 100,
   serving = 5,
-  getTiming = () => undefined,
-  getServing = () => undefined
-) => new Intake(createIntakeValues(id, timingId, typeId, serving), getTiming, getServing);
+  getTiming: () => Timing = () => undefined,
+  getType: () => Type = () => undefined
+) => new Intake(createIntakeValues(id, timingId, typeId, serving), getTiming, getType);
 
 export const createMakerValues = (id = 1, name = "type"): IMakerValues => ({
   id,
@@ -109,3 +111,28 @@ export const createFormValues = (id = 1, intakeId = 10, formId = "id"): IFormVal
 });
 export const createForm = (id = 1, intakeId = 10, formId = "id") =>
   new Form(createFormValues(id, intakeId, formId), () => undefined);
+
+export const createIntakeDetailValues = (
+  date = new Date(),
+  timingId = 1,
+  suppliId = 1,
+  serving = 1
+): IIntakeDetailValues => ({
+  date,
+  timingId,
+  suppliId,
+  serving
+});
+export const createIntakeDetail = (
+  date = new Date(),
+  timingId = 1,
+  suppliId = 1,
+  serving = 1,
+  getTiming: () => Timing = () => undefined,
+  getSuppli: () => Suppli = () => undefined
+): IntakeDetail =>
+  new IntakeDetail(
+    createIntakeDetailValues(date, timingId, suppliId, serving),
+    getTiming,
+    getSuppli
+  );

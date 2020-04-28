@@ -12,7 +12,9 @@ import {
   ITimingValues,
   IFormValues,
   Type,
-  Form
+  Form,
+  IntakeDetail,
+  IIntakeDetailValues
 } from "model/index";
 import { ISheetValues, IRowValues } from "datastore/index";
 
@@ -71,5 +73,18 @@ export const createFormSheet = (forms: Array<Form | IFormValues>) => {
   return [
     ["id", "intakeId", "formId"],
     ...forms.map<IRowValues>(form => [form.id, form.intakeId, form.formId])
+  ];
+};
+
+export const createIntakeDetailSheet = (
+  intakeDetails: Array<IntakeDetail | IIntakeDetailValues>
+): ISheetValues => {
+  return [
+    ...intakeDetails.map(intakeDetail => [
+      intakeDetail.date.toISOString(),
+      intakeDetail.timingId,
+      intakeDetail.suppliId,
+      intakeDetail.serving
+    ])
   ];
 };

@@ -3,6 +3,7 @@ import testRelationType from "./test/testRelationType";
 import testUpdateIntakes from "./test/testUpdateIntakes";
 import { PropertyNames } from "constant/index";
 import { TestSpreadsheetHelper } from "gas-lib";
+import testAddIntakeDetails from "./test/testAddIntakeDetails";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let global: any;
@@ -30,5 +31,10 @@ global.runTest = () => {
   testMasterdata();
   testRelationType();
   testUpdateIntakes();
+  testAddIntakeDetails();
   Logger.log("ok");
 };
+global.testMasterdata = testMasterdata;
+global.testRelationType = testRelationType;
+global.testUpdateIntakes = testUpdateIntakes;
+global.testAddIntakeDetails = testAddIntakeDetails;

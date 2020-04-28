@@ -13,14 +13,14 @@ exports.createIntakeValues = function (id, timingId, typeId, serving) {
         serving: serving
     });
 };
-exports.createIntake = function (id, timingId, typeId, serving, getTiming, getServing) {
+exports.createIntake = function (id, timingId, typeId, serving, getTiming, getType) {
     if (id === void 0) { id = 1; }
     if (timingId === void 0) { timingId = 10; }
     if (typeId === void 0) { typeId = 100; }
     if (serving === void 0) { serving = 5; }
     if (getTiming === void 0) { getTiming = function () { return undefined; }; }
-    if (getServing === void 0) { getServing = function () { return undefined; }; }
-    return new index_1.Intake(exports.createIntakeValues(id, timingId, typeId, serving), getTiming, getServing);
+    if (getType === void 0) { getType = function () { return undefined; }; }
+    return new index_1.Intake(exports.createIntakeValues(id, timingId, typeId, serving), getTiming, getType);
 };
 exports.createMakerValues = function (id, name) {
     if (id === void 0) { id = 1; }
@@ -115,5 +115,26 @@ exports.createForm = function (id, intakeId, formId) {
     if (intakeId === void 0) { intakeId = 10; }
     if (formId === void 0) { formId = "id"; }
     return new index_1.Form(exports.createFormValues(id, intakeId, formId), function () { return undefined; });
+};
+exports.createIntakeDetailValues = function (date, timingId, suppliId, serving) {
+    if (date === void 0) { date = new Date(); }
+    if (timingId === void 0) { timingId = 1; }
+    if (suppliId === void 0) { suppliId = 1; }
+    if (serving === void 0) { serving = 1; }
+    return ({
+        date: date,
+        timingId: timingId,
+        suppliId: suppliId,
+        serving: serving
+    });
+};
+exports.createIntakeDetail = function (date, timingId, suppliId, serving, getTiming, getSuppli) {
+    if (date === void 0) { date = new Date(); }
+    if (timingId === void 0) { timingId = 1; }
+    if (suppliId === void 0) { suppliId = 1; }
+    if (serving === void 0) { serving = 1; }
+    if (getTiming === void 0) { getTiming = function () { return undefined; }; }
+    if (getSuppli === void 0) { getSuppli = function () { return undefined; }; }
+    return new index_1.IntakeDetail(exports.createIntakeDetailValues(date, timingId, suppliId, serving), getTiming, getSuppli);
 };
 //# sourceMappingURL=TestModelHelper.js.map

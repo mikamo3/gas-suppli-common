@@ -7,7 +7,8 @@ import {
   ISuppliAmountValues,
   ITimingValues,
   ITypeValues,
-  IFormValues
+  IFormValues,
+  IIntakeDetailValues
 } from "../model";
 import { Spreadsheet } from "gas-lib";
 type IColumPosition = { [s: string]: number };
@@ -20,7 +21,12 @@ const intakeColumnPosition: { [s in keyof IIntakeValues]: number } = {
   typeId: 2,
   serving: 3
 };
-
+const intakeDatailColumPosition: { [s in keyof IIntakeDetailValues]: number } = {
+  date: 0,
+  timingId: 1,
+  suppliId: 2,
+  serving: 3
+};
 type SpreadSheetDatastoreConfig = {
   spreadSheetId: string;
 } & DatastoreConfig;
@@ -94,5 +100,16 @@ export class SpreadSheetDatastore implements Datastore {
       return intakeRow;
     });
     this.spreadSheet.replace("intake", intakeArray, 1);
+  }
+  addIntakeDetails(intakeDetails: IIntakeDetailValues[]) {
+    const intakeDetailArray = intakeDetails.map<IRowValues>(id => {
+      const row = [];
+      for (const position in intakeDatailColumPosition) {
+        row[intakeDatailColumPosition[position]] = id[position];
+      }
+      row[0] = id.date.toISOString();
+      return row;
+    });
+    this.spreadSheet.add("intakeDetail", intakeDetailArray);
   }
 }

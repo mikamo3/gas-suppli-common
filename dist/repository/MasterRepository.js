@@ -124,6 +124,20 @@ var MasterRepository = /** @class */ (function () {
         });
         this.datastore.updateIntakes(intakeValues);
     };
+    MasterRepository.prototype.addIntakeDetails = function (intakeDetails) {
+        var intakeDetailValues = intakeDetails.map(function (id) {
+            if (id instanceof index_1.IntakeDetail) {
+                return {
+                    date: id.date,
+                    serving: id.serving,
+                    suppliId: id.suppliId,
+                    timingId: id.timingId
+                };
+            }
+            return id;
+        });
+        this.datastore.addIntakeDetails(intakeDetailValues);
+    };
     MasterRepository.prototype.createType = function (type) {
         var _this = this;
         return new index_1.Type(type, function () { return _this.getSupplisByTypeId(type.id); }, function () { return _this.getIntakesByTypeId(type.id); });

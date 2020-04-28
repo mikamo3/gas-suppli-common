@@ -10,4 +10,5 @@ export declare class DummyDatastore implements Datastore {
     fetchType(): ITypeValues[];
     fetchForm(): IFormValues[];
     updateIntakes(): void;
+    addIntakeDetails(): void;
 }

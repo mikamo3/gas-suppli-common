@@ -38,4 +38,7 @@ export class DummyDatastore implements Datastore {
   updateIntakes() {
     //do nothing
   }
+  addIntakeDetails() {
+    //do nothing
+  }
 }

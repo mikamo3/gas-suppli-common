@@ -39,6 +39,7 @@
     "gas-webpack-plugin": "1.0.2",
     "husky": "^4.2.5",
     "jest": "25.3.0",
+    "jest-date-mock": "^1.0.8",
     "prettier": "2.0.4",
     "rimraf": "3.0.2",
     "ts-jest": "^25.3.1",
@@ -53,6 +54,9 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
+    "setupFiles": [
+      "jest-date-mock"
+    ],
     "testRegex": "((src|__tests__)/.+(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "testPathIgnorePatterns": [
       "/node_modules/",

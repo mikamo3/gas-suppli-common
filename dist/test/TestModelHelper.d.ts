@@ -1,6 +1,6 @@
-import { Type, Suppli, Intake, Maker, SuppliAmount, Timing, Form } from "../model/index";
+import { Type, Suppli, Intake, Maker, SuppliAmount, Timing, Form, IntakeDetail } from "../model/index";
 export declare const createIntakeValues: (id?: number, timingId?: number, typeId?: number, serving?: number) => Pick<Intake, "id" | "typeId" | "serving" | "timingId">;
-export declare const createIntake: (id?: number, timingId?: number, typeId?: number, serving?: number, getTiming?: () => any, getServing?: () => any) => Intake;
+export declare const createIntake: (id?: number, timingId?: number, typeId?: number, serving?: number, getTiming?: () => Timing, getType?: () => Type) => Intake;
 export declare const createMakerValues: (id?: number, name?: string) => Pick<Maker, "id" | "name">;
 export declare const createMaker: (id?: number, name?: string, getSupplis?: () => Suppli[]) => Maker;
 export declare const createSuppliValues: (id?: number, typeId?: number, makerId?: number, name?: string, amountPerServing?: number, servingUnit?: string) => Pick<Suppli, "id" | "name" | "makerId" | "typeId" | "amountPerServing" | "servingUnit">;
@@ -13,3 +13,5 @@ export declare const createTypeValues: (id?: number, name?: string) => Pick<Type
 export declare const createType: (id?: number, name?: string, getSupplis?: () => Suppli[], getIntakes?: () => Intake[]) => Type;
 export declare const createFormValues: (id?: number, intakeId?: number, formId?: string) => Pick<Form, "id" | "intakeId" | "formId">;
 export declare const createForm: (id?: number, intakeId?: number, formId?: string) => Form;
+export declare const createIntakeDetailValues: (date?: Date, timingId?: number, suppliId?: number, serving?: number) => Pick<IntakeDetail, "suppliId" | "serving" | "timingId" | "date">;
+export declare const createIntakeDetail: (date?: Date, timingId?: number, suppliId?: number, serving?: number, getTiming?: () => Timing, getSuppli?: () => Suppli) => IntakeDetail;

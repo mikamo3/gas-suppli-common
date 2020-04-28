@@ -1,7 +1,7 @@
 import { SpreadSheetDatastore } from "datastore/index";
 import { Spreadsheet } from "gas-lib";
 import { IIntakeValues, IFormValues } from "model/index";
-
+import { advanceTo } from "jest-date-mock";
 import { mocked } from "ts-jest/utils";
 import {
   createIntakeValues,
@@ -18,8 +18,10 @@ import {
   createTypeValues,
   createTypeSheet,
   createFormValues,
-  createFormSheet
+  createFormSheet,
+  createIntakeDetailValues
 } from "test/index";
+import { IIntakeDetailValues } from "model/IntakeDetail";
 
 jest.mock("gas-lib");
 
@@ -33,10 +35,7 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  mocked(Spreadsheet.openById).mockReturnValue({
-    getAllValues: Spreadsheet.prototype.getAllValues,
-    replace: Spreadsheet.prototype.replace
-  } as Spreadsheet);
+  mocked(Spreadsheet.openById).mockReturnValue(Spreadsheet.prototype);
   mocked(Spreadsheet.prototype.getAllValues).mockReturnValue(getAllValuesRV);
   spreadSheetDatastore = new SpreadSheetDatastore(configure);
 });
@@ -237,6 +236,40 @@ describe("updateIntakes", () => {
         [3, 12, 32, 7]
       ];
       expect(Spreadsheet.prototype.replace).toBeCalledWith("intake", expected, 1);
+    });
+  });
+});
+
+describe("addIntakeDetailValues", () => {
+  let intakeDetails: IIntakeDetailValues[];
+  beforeAll(() => {
+    intakeDetails = [];
+  });
+  beforeEach(() => {
+    advanceTo(new Date(2020, 3, 1, 12, 0, 0));
+    spreadSheetDatastore.addIntakeDetails(intakeDetails);
+  });
+  describe("空配列が指定されたとき", () => {
+    beforeAll(() => {
+      intakeDetails = [];
+    });
+    it("登録されないこと", () => {
+      expect(Spreadsheet.prototype.add).toBeCalledWith("intakeDetail", []);
+    });
+  });
+  describe("任意の値が指定されたとき", () => {
+    beforeAll(() => {
+      intakeDetails = [
+        createIntakeDetailValues(new Date(), 1, 10, 100),
+        createIntakeDetailValues(new Date(), 2, 20, 200)
+      ];
+    });
+    it("dateのtoISOStringの値が1カラム目に設定されること", () => {
+      const expected = [
+        ["2020-04-01T12:00:00.000Z", 1, 10, 100],
+        ["2020-04-01T12:00:00.000Z", 2, 20, 200]
+      ];
+      expect(Spreadsheet.prototype.add).toBeCalledWith("intakeDetail", expected);
     });
   });
 });

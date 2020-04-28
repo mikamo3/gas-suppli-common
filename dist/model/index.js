@@ -10,4 +10,5 @@ __export(require("./Suppli"));
 __export(require("./SuppliAmount"));
 __export(require("./Timing"));
 __export(require("./Type"));
+__export(require("./IntakeDetail"));
 //# sourceMappingURL=index.js.map

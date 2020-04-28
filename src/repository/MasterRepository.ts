@@ -14,7 +14,9 @@ import {
   Suppli,
   SuppliAmount,
   Timing,
-  Type
+  Type,
+  IntakeDetail,
+  IIntakeDetailValues
 } from "../model/index";
 export class MasterRepository {
   datastore: Datastore;
@@ -134,6 +136,20 @@ export class MasterRepository {
       return i;
     });
     this.datastore.updateIntakes(intakeValues);
+  }
+  addIntakeDetails(intakeDetails: Array<IntakeDetail | IIntakeDetailValues>) {
+    const intakeDetailValues = intakeDetails.map<IIntakeDetailValues>(id => {
+      if (id instanceof IntakeDetail) {
+        return {
+          date: id.date,
+          serving: id.serving,
+          suppliId: id.suppliId,
+          timingId: id.timingId
+        };
+      }
+      return id;
+    });
+    this.datastore.addIntakeDetails(intakeDetailValues);
   }
   createType(type: ITypeValues) {
     return new Type(
