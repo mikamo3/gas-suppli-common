@@ -82,6 +82,14 @@ var MasterRepository = /** @class */ (function () {
         }
         return this.createTiming(fTiming);
     };
+    MasterRepository.prototype.getTimingByName = function (name) {
+        var timings = this.datastore.fetchTiming();
+        var fTiming = underscore_1.find(timings, function (t) { return t.name === name; });
+        if (!fTiming) {
+            return undefined;
+        }
+        return this.createTiming(fTiming);
+    };
     MasterRepository.prototype.getIntakes = function () {
         var _this = this;
         var intakes = this.datastore.fetchIntake();

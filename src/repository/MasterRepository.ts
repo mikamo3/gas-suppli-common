@@ -96,7 +96,14 @@ export class MasterRepository {
     }
     return this.createTiming(fTiming);
   }
-
+  getTimingByName(name: string): Timing {
+    const timings = this.datastore.fetchTiming();
+    const fTiming = find(timings, t => t.name === name);
+    if (!fTiming) {
+      return undefined;
+    }
+    return this.createTiming(fTiming);
+  }
   getIntakes() {
     const intakes = this.datastore.fetchIntake();
     return intakes.map<Intake>(i => this.createIntake(i));

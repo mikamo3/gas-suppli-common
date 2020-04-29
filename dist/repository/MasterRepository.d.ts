@@ -15,6 +15,7 @@ export declare class MasterRepository {
     getSuppliAmountsBySuppliId(suppliId: number): SuppliAmount[];
     getTimings(): Timing[];
     getTimingById(id: number): Timing;
+    getTimingByName(name: string): Timing;
     getIntakes(): Intake[];
     getIntakeById(id: number): Intake;
     getIntakesByTypeId(typeId: number): Intake[];

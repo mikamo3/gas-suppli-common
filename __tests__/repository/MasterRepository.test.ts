@@ -31,7 +31,6 @@ import {
 } from "test/index";
 import { mocked } from "ts-jest/utils";
 import { IntakeDetail, IIntakeDetailValues } from "model/IntakeDetail";
-
 let masterRepository: MasterRepository;
 let datastore: Datastore;
 
@@ -385,7 +384,35 @@ describe("getTimings", () => {
     });
   });
 });
+describe("getTimingByName", () => {
+  let fetchTimingReturnValue: ITimingValues[];
+  let name: string;
+  let actual: Timing;
 
+  beforeAll(() => {
+    fetchTimingReturnValue = [createTimingValues(1, "timing1"), createTimingValues(2, "timing2")];
+  });
+  beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchTiming).mockReturnValue(fetchTimingReturnValue);
+    actual = masterRepository.getTimingByName(name);
+  });
+  describe("nameと等しいTimingが存在する場合", () => {
+    beforeAll(() => {
+      name = "timing2";
+    });
+    it("指定したTimingが返却されること", () => {
+      expect(actual.name).toEqual(name);
+    });
+  });
+  describe("nameと等しいTimingが存在しない場合", () => {
+    beforeAll(() => {
+      name = "timing3";
+    });
+    it("undefinedが返却されること", () => {
+      expect(actual).toBeUndefined();
+    });
+  });
+});
 describe("getIntakes", () => {
   let fetchIntakeReturnValue: IIntakeValues[];
   let fetchTimingReturnValue: ITimingValues[];
@@ -543,11 +570,11 @@ describe("updateIntakes", () => {
 });
 describe("addIntakeDetails", () => {
   let intakeDetails: Array<IIntakeDetailValues | IntakeDetail>;
+  const date = new Date();
   beforeAll(() => {
     intakeDetails = [];
   });
   beforeEach(() => {
-    jest.spyOn(global, "Date");
     masterRepository.addIntakeDetails(intakeDetails);
   });
   describe("空の配列が渡されたとき", () => {
@@ -561,12 +588,12 @@ describe("addIntakeDetails", () => {
   describe("IntakeDetail,IIntakeDetailValuesが渡されたとき", () => {
     beforeAll(() => {
       intakeDetails = [
-        createIntakeDetailValues(new Date(), 1, 10, 100),
-        createIntakeDetail(new Date(), 2, 20, 200)
+        createIntakeDetailValues(date, 1, 10, 100),
+        createIntakeDetail(date, 2, 20, 200)
       ];
     });
     it("IntakeDetailはIIntakeDetailValuesに変換されて登録されること", () => {
-      const expected = [intakeDetails[0], createIntakeDetailValues(new Date(), 2, 20, 200)];
+      const expected = [intakeDetails[0], createIntakeDetailValues(date, 2, 20, 200)];
       expect(DummyDatastore.prototype.addIntakeDetails).toBeCalledWith(expected);
     });
   });
