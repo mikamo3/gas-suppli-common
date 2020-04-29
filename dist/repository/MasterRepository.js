@@ -13,11 +13,7 @@ var MasterRepository = /** @class */ (function () {
     };
     MasterRepository.prototype.getTypeById = function (id) {
         var types = this.datastore.fetchType();
-        var type = underscore_1.find(types, function (f) { return f.id === id; });
-        if (!type) {
-            return undefined;
-        }
-        return this.createType(type);
+        return this.getById(id, types, this.createType);
     };
     MasterRepository.prototype.getSupplis = function () {
         var _this = this;
@@ -26,11 +22,7 @@ var MasterRepository = /** @class */ (function () {
     };
     MasterRepository.prototype.getSuppliById = function (id) {
         var supplis = this.datastore.fetchSuppli();
-        var fSuppli = underscore_1.find(supplis, function (s) { return s.id === id; });
-        if (!fSuppli) {
-            return undefined;
-        }
-        return this.createSuppli(fSuppli);
+        return this.getById(id, supplis, this.createSuppli);
     };
     MasterRepository.prototype.getSupplisByTypeId = function (typeId) {
         var _this = this;
@@ -51,11 +43,11 @@ var MasterRepository = /** @class */ (function () {
     };
     MasterRepository.prototype.getMakerById = function (id) {
         var makers = this.datastore.fetchMaker();
-        var maker = underscore_1.find(makers, function (m) { return m.id === id; });
-        if (!maker) {
-            return undefined;
-        }
-        return this.createMaker(maker);
+        return this.getById(id, makers, this.createMaker);
+    };
+    MasterRepository.prototype.getMakerByName = function (name) {
+        var makers = this.datastore.fetchMaker();
+        return this.getByName(name, makers, this.createMaker);
     };
     MasterRepository.prototype.getSuppliAmounts = function () {
         var _this = this;
@@ -76,19 +68,11 @@ var MasterRepository = /** @class */ (function () {
     };
     MasterRepository.prototype.getTimingById = function (id) {
         var timings = this.datastore.fetchTiming();
-        var fTiming = underscore_1.find(timings, function (t) { return t.id === id; });
-        if (!fTiming) {
-            return undefined;
-        }
-        return this.createTiming(fTiming);
+        return this.getById(id, timings, this.createTiming);
     };
     MasterRepository.prototype.getTimingByName = function (name) {
         var timings = this.datastore.fetchTiming();
-        var fTiming = underscore_1.find(timings, function (t) { return t.name === name; });
-        if (!fTiming) {
-            return undefined;
-        }
-        return this.createTiming(fTiming);
+        return this.getByName(name, timings, this.createTiming);
     };
     MasterRepository.prototype.getIntakes = function () {
         var _this = this;
@@ -97,11 +81,7 @@ var MasterRepository = /** @class */ (function () {
     };
     MasterRepository.prototype.getIntakeById = function (id) {
         var intakes = this.datastore.fetchIntake();
-        var fIntake = underscore_1.find(intakes, function (i) { return i.id === id; });
-        if (!fIntake) {
-            return undefined;
-        }
-        return this.createIntake(fIntake);
+        return this.getById(id, intakes, this.createIntake);
     };
     MasterRepository.prototype.getIntakesByTypeId = function (typeId) {
         var _this = this;
@@ -173,6 +153,20 @@ var MasterRepository = /** @class */ (function () {
     MasterRepository.prototype.createForm = function (form) {
         var _this = this;
         return new index_1.Form(form, function () { return _this.getIntakeById(form.intakeId); });
+    };
+    MasterRepository.prototype.getById = function (id, data, create) {
+        var findData = underscore_1.find(data, function (d) { return d.id === id; });
+        if (findData) {
+            return create(findData);
+        }
+        return undefined;
+    };
+    MasterRepository.prototype.getByName = function (name, data, create) {
+        var findData = underscore_1.find(data, function (d) { return d.name === name; });
+        if (findData) {
+            return create(findData);
+        }
+        return undefined;
     };
     return MasterRepository;
 }());

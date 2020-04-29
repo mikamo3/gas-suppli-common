@@ -284,7 +284,34 @@ describe("getMakers", () => {
     });
   });
 });
-
+describe("getMakerByName", () => {
+  let name: string;
+  let actual: Maker;
+  let fetchMakerReturnValue: IMakerValues[];
+  beforeAll(() => {
+    fetchMakerReturnValue = [createMakerValues(1, "maker1"), createMakerValues(2, "maker2")];
+  });
+  beforeEach(() => {
+    mocked(DummyDatastore.prototype.fetchMaker).mockReturnValue(fetchMakerReturnValue);
+    actual = masterRepository.getMakerByName(name);
+  });
+  describe("nameと等しいMakerが存在する場合", () => {
+    beforeAll(() => {
+      name = "maker2";
+    });
+    it("指定したTimingが返却されること", () => {
+      expect(actual.name).toEqual(name);
+    });
+  });
+  describe("nameと等しいTimingが存在しない場合", () => {
+    beforeAll(() => {
+      name = "timing3";
+    });
+    it("undefinedが返却されること", () => {
+      expect(actual).toBeUndefined();
+    });
+  });
+});
 describe("getSuppliAmounts", () => {
   let fetchSuppliReturnValue: ISuppliValues[];
   let fetchSuppliAmountsReturnValue: ISuppliAmountValues[];

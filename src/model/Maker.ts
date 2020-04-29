@@ -1,8 +1,9 @@
 import { Suppli } from "./Suppli";
 import { ITypeValues } from "./Type";
+import { HasId, HasName } from "./common";
 
 export type IMakerValues = Omit<Maker, "supplis">;
-export class Maker {
+export class Maker implements HasId, HasName {
   id: number;
   name: string;
   private getSupplis: () => Suppli[];

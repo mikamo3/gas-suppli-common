@@ -1,7 +1,8 @@
 import { Intake } from "./Intake";
+import { HasId, HasName } from "./common";
 
 export type ITimingValues = Omit<Timing, "intakes">;
-export class Timing {
+export class Timing implements HasId, HasName {
   id: number;
   name: string;
   get intakes() {

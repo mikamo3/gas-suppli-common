@@ -1,8 +1,9 @@
 import { Suppli } from "./Suppli";
 import { Intake } from "./Intake";
+import { HasId, HasName } from "./common";
 
 export type ITypeValues = Omit<Type, "supplis" | "intakes">;
-export class Type {
+export class Type implements HasId, HasName {
   id: number;
   name: string;
   private getSupplis: () => Suppli[];

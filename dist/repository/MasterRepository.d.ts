@@ -11,6 +11,7 @@ export declare class MasterRepository {
     getSupplisByMakerId(makerId: number): Suppli[];
     getMakers(): Maker[];
     getMakerById(id: number): Maker;
+    getMakerByName(name: string): Maker;
     getSuppliAmounts(): SuppliAmount[];
     getSuppliAmountsBySuppliId(suppliId: number): SuppliAmount[];
     getTimings(): Timing[];
@@ -30,4 +31,6 @@ export declare class MasterRepository {
     createTiming(timing: ITimingValues): Timing;
     createIntake(intake: IIntakeValues): Intake;
     createForm(form: IFormValues): Form;
+    private getById;
+    private getByName;
 }

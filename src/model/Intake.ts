@@ -1,8 +1,9 @@
 import { Timing } from "./Timing";
 import { Type } from "./Type";
+import { HasId } from "./common";
 
 export type IIntakeValues = Omit<Intake, "timing" | "type">;
-export class Intake {
+export class Intake implements HasId {
   id: number;
   serving: number;
   timingId: number;

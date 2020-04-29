@@ -18,6 +18,7 @@ import {
   IntakeDetail,
   IIntakeDetailValues
 } from "../model/index";
+import { HasId, HasName } from "model/common";
 export class MasterRepository {
   datastore: Datastore;
   constructor(datastore: Datastore) {
@@ -29,11 +30,7 @@ export class MasterRepository {
   }
   getTypeById(id: number): Type {
     const types = this.datastore.fetchType();
-    const type = find(types, f => f.id === id);
-    if (!type) {
-      return undefined;
-    }
-    return this.createType(type);
+    return this.getById(id, types, this.createType);
   }
   getSupplis() {
     const supplis = this.datastore.fetchSuppli();
@@ -41,11 +38,7 @@ export class MasterRepository {
   }
   getSuppliById(id: number) {
     const supplis = this.datastore.fetchSuppli();
-    const fSuppli = find(supplis, s => s.id === id);
-    if (!fSuppli) {
-      return undefined;
-    }
-    return this.createSuppli(fSuppli);
+    return this.getById(id, supplis, this.createSuppli);
   }
   getSupplisByTypeId(typeId: number): Suppli[] {
     const supplis = this.datastore.fetchSuppli();
@@ -65,11 +58,11 @@ export class MasterRepository {
 
   getMakerById(id: number): Maker {
     const makers = this.datastore.fetchMaker();
-    const maker = find(makers, m => m.id === id);
-    if (!maker) {
-      return undefined;
-    }
-    return this.createMaker(maker);
+    return this.getById(id, makers, this.createMaker);
+  }
+  getMakerByName(name: string): Maker {
+    const makers = this.datastore.fetchMaker();
+    return this.getByName(name, makers, this.createMaker);
   }
 
   getSuppliAmounts(): SuppliAmount[] {
@@ -90,19 +83,11 @@ export class MasterRepository {
 
   getTimingById(id: number): Timing {
     const timings = this.datastore.fetchTiming();
-    const fTiming = find(timings, t => t.id === id);
-    if (!fTiming) {
-      return undefined;
-    }
-    return this.createTiming(fTiming);
+    return this.getById(id, timings, this.createTiming);
   }
   getTimingByName(name: string): Timing {
     const timings = this.datastore.fetchTiming();
-    const fTiming = find(timings, t => t.name === name);
-    if (!fTiming) {
-      return undefined;
-    }
-    return this.createTiming(fTiming);
+    return this.getByName(name, timings, this.createTiming);
   }
   getIntakes() {
     const intakes = this.datastore.fetchIntake();
@@ -110,11 +95,7 @@ export class MasterRepository {
   }
   getIntakeById(id: number) {
     const intakes = this.datastore.fetchIntake();
-    const fIntake = find(intakes, i => i.id === id);
-    if (!fIntake) {
-      return undefined;
-    }
-    return this.createIntake(fIntake);
+    return this.getById(id, intakes, this.createIntake);
   }
   getIntakesByTypeId(typeId: number) {
     const intakes = this.datastore.fetchIntake();
@@ -191,5 +172,19 @@ export class MasterRepository {
   }
   createForm(form: IFormValues) {
     return new Form(form, () => this.getIntakeById(form.intakeId));
+  }
+  private getById<T extends HasId, Y>(id: number, data: T[], create: (data: T) => Y): Y {
+    const findData = find(data, d => d.id === id);
+    if (findData) {
+      return create(findData);
+    }
+    return undefined;
+  }
+  private getByName<T extends HasName, Y>(name: string, data: T[], create: (data: T) => Y): Y {
+    const findData = find(data, d => d.name === name);
+    if (findData) {
+      return create(findData);
+    }
+    return undefined;
   }
 }
