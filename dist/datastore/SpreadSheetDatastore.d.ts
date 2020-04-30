@@ -16,7 +16,6 @@ export declare class SpreadSheetDatastore implements Datastore {
     fetchSuppliAmount(): Pick<import("../model").SuppliAmount, "id" | "amount" | "suppliId">[];
     fetchTiming(): Pick<import("../model").Timing, "id" | "name">[];
     fetchType(): Pick<import("../model").Type, "id" | "name">[];
-    fetchForm(): Pick<import("../model").Form, "id" | "intakeId" | "formId">[];
     private fetch;
     private getDataPosition;
     private convertModelValues;

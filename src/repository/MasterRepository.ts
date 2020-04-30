@@ -1,15 +1,8 @@
 import { filter, find } from "underscore";
-import { Datastore } from "../datastore/Datastore";
+import { Datastore } from "datastore/Datastore";
 import {
-  Form,
-  IFormValues,
   IIntakeValues,
-  IMakerValues,
   Intake,
-  ISuppliAmountValues,
-  ISuppliValues,
-  ITimingValues,
-  ITypeValues,
   Maker,
   Suppli,
   SuppliAmount,
@@ -17,98 +10,98 @@ import {
   Type,
   IntakeDetail,
   IIntakeDetailValues
-} from "../model/index";
-import { HasId, HasName } from "model/common";
+} from "model/index";
+import {
+  createType,
+  createSuppli,
+  createIntake,
+  createMaker,
+  createSuppliAmounts,
+  createTiming
+} from "model/relation";
 export class MasterRepository {
   datastore: Datastore;
   constructor(datastore: Datastore) {
     this.datastore = datastore;
   }
   getTypes(): Type[] {
-    const types = this.datastore.fetchType();
-    return types.map<Type>(t => this.createType(t));
+    return this.datastore.fetchType().map<Type>(t => createType(t, this));
   }
   getTypeById(id: number): Type {
-    const types = this.datastore.fetchType();
-    return this.getById(id, types, this.createType);
+    const type = this.getFirstBy("id", id, this.datastore.fetchType());
+    return type ? createType(type, this) : undefined;
   }
   getSupplis() {
-    const supplis = this.datastore.fetchSuppli();
-    return supplis.map<Suppli>(s => this.createSuppli(s));
+    return this.datastore.fetchSuppli().map<Suppli>(s => createSuppli(s, this));
   }
   getSuppliById(id: number) {
-    const supplis = this.datastore.fetchSuppli();
-    return this.getById(id, supplis, this.createSuppli);
+    const suppli = this.getFirstBy("id", id, this.datastore.fetchSuppli());
+    return suppli ? createSuppli(suppli, this) : undefined;
   }
   getSupplisByTypeId(typeId: number): Suppli[] {
-    const supplis = this.datastore.fetchSuppli();
-    const fSupplis = filter(supplis, s => s.typeId === typeId);
-    return fSupplis.map<Suppli>(fs => this.createSuppli(fs));
+    return this.getBy("typeId", typeId, this.datastore.fetchSuppli()).map<Suppli>(fs =>
+      createSuppli(fs, this)
+    );
   }
   getSupplisByMakerId(makerId: number): Suppli[] {
-    const supplis = this.datastore.fetchSuppli();
-    const fSupplis = filter(supplis, s => s.makerId === makerId);
-    return fSupplis.map<Suppli>(fs => this.createSuppli(fs));
+    return this.getBy("makerId", makerId, this.datastore.fetchSuppli()).map<Suppli>(fs =>
+      createSuppli(fs, this)
+    );
   }
 
   getMakers(): Maker[] {
-    const makers = this.datastore.fetchMaker();
-    return makers.map<Maker>(m => this.createMaker(m));
+    return this.datastore.fetchMaker().map<Maker>(m => createMaker(m, this));
   }
 
   getMakerById(id: number): Maker {
-    const makers = this.datastore.fetchMaker();
-    return this.getById(id, makers, this.createMaker);
+    const maker = this.getFirstBy("id", id, this.datastore.fetchMaker());
+    return maker ? createMaker(maker, this) : undefined;
   }
   getMakerByName(name: string): Maker {
-    const makers = this.datastore.fetchMaker();
-    return this.getByName(name, makers, this.createMaker);
+    const maker = this.getFirstBy("name", name, this.datastore.fetchMaker());
+    return maker ? createMaker(maker, this) : undefined;
   }
 
   getSuppliAmounts(): SuppliAmount[] {
-    const suppliAmounts = this.datastore.fetchSuppliAmount();
-    return suppliAmounts.map<SuppliAmount>(sa => this.createSuppliAmounts(sa));
+    return this.datastore
+      .fetchSuppliAmount()
+      .map<SuppliAmount>(sa => createSuppliAmounts(sa, this));
   }
   getSuppliAmountsBySuppliId(suppliId: number): SuppliAmount[] {
-    const suppliAmounts = this.datastore.fetchSuppliAmount();
-    return filter(suppliAmounts, sa => sa.suppliId === suppliId).map<SuppliAmount>(sa =>
-      this.createSuppliAmounts(sa)
+    return this.getBy("suppliId", suppliId, this.datastore.fetchSuppliAmount()).map<SuppliAmount>(
+      sa => createSuppliAmounts(sa, this)
     );
   }
 
   getTimings(): Timing[] {
-    const timings = this.datastore.fetchTiming();
-    return timings.map<Timing>(t => this.createTiming(t));
+    return this.datastore.fetchTiming().map<Timing>(t => createTiming(t, this));
   }
 
   getTimingById(id: number): Timing {
-    const timings = this.datastore.fetchTiming();
-    return this.getById(id, timings, this.createTiming);
+    const timing = this.getFirstBy("id", id, this.datastore.fetchTiming());
+    return timing ? createTiming(timing, this) : undefined;
   }
   getTimingByName(name: string): Timing {
-    const timings = this.datastore.fetchTiming();
-    return this.getByName(name, timings, this.createTiming);
-  }
-  getIntakes() {
-    const intakes = this.datastore.fetchIntake();
-    return intakes.map<Intake>(i => this.createIntake(i));
-  }
-  getIntakeById(id: number) {
-    const intakes = this.datastore.fetchIntake();
-    return this.getById(id, intakes, this.createIntake);
-  }
-  getIntakesByTypeId(typeId: number) {
-    const intakes = this.datastore.fetchIntake();
-    return filter(intakes, i => i.typeId === typeId).map<Intake>(i => this.createIntake(i));
-  }
-  getIntakesByTimingId(timingId: number) {
-    const intakes = this.datastore.fetchIntake();
-    return filter(intakes, i => i.timingId === timingId).map<Intake>(i => this.createIntake(i));
+    const timing = this.getFirstBy("name", name, this.datastore.fetchTiming());
+    return timing ? createTiming(timing, this) : undefined;
   }
 
-  getForms() {
-    const forms = this.datastore.fetchForm();
-    return forms.map<Form>(f => this.createForm(f));
+  getIntakes() {
+    return this.datastore.fetchIntake().map<Intake>(i => createIntake(i, this));
+  }
+  getIntakeById(id: number) {
+    const intake = this.getFirstBy("id", id, this.datastore.fetchIntake());
+    return intake ? createIntake(intake, this) : undefined;
+  }
+  getIntakesByTypeId(typeId: number) {
+    return this.getBy("typeId", typeId, this.datastore.fetchIntake()).map<Intake>(i =>
+      createIntake(i, this)
+    );
+  }
+  getIntakesByTimingId(timingId: number) {
+    return this.getBy("timingId", timingId, this.datastore.fetchIntake()).map<Intake>(i =>
+      createIntake(i, this)
+    );
   }
 
   updateIntakes(intakes: Array<Intake | IIntakeValues>) {
@@ -139,52 +132,10 @@ export class MasterRepository {
     });
     this.datastore.addIntakeDetails(intakeDetailValues);
   }
-  createType(type: ITypeValues) {
-    return new Type(
-      type,
-      () => this.getSupplisByTypeId(type.id),
-      () => this.getIntakesByTypeId(type.id)
-    );
+  private getFirstBy<T>(key: keyof T, search: unknown, data: T[]) {
+    return find(data, d => d[key] === search);
   }
-  createSuppli(suppli: ISuppliValues) {
-    return new Suppli(
-      suppli,
-      () => this.getTypeById(suppli.typeId),
-      () => this.getMakerById(suppli.makerId),
-      () => this.getSuppliAmountsBySuppliId(suppli.id)
-    );
-  }
-  createMaker(maker: IMakerValues) {
-    return new Maker(maker, () => this.getSupplisByMakerId(maker.id));
-  }
-  createSuppliAmounts(suppliAmount: ISuppliAmountValues) {
-    return new SuppliAmount(suppliAmount, () => this.getSuppliById(suppliAmount.suppliId));
-  }
-  createTiming(timing: ITimingValues) {
-    return new Timing(timing, () => this.getIntakesByTimingId(timing.id));
-  }
-  createIntake(intake: IIntakeValues) {
-    return new Intake(
-      intake,
-      () => this.getTimingById(intake.timingId),
-      () => this.getTypeById(intake.typeId)
-    );
-  }
-  createForm(form: IFormValues) {
-    return new Form(form, () => this.getIntakeById(form.intakeId));
-  }
-  private getById<T extends HasId, Y>(id: number, data: T[], create: (data: T) => Y): Y {
-    const findData = find(data, d => d.id === id);
-    if (findData) {
-      return create(findData);
-    }
-    return undefined;
-  }
-  private getByName<T extends HasName, Y>(name: string, data: T[], create: (data: T) => Y): Y {
-    const findData = find(data, d => d.name === name);
-    if (findData) {
-      return create(findData);
-    }
-    return undefined;
+  private getBy<T>(key: keyof T, search: unknown, data: T[]) {
+    return filter(data, d => d[key] === search);
   }
 }

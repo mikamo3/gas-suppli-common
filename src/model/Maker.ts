@@ -1,6 +1,6 @@
 import { Suppli } from "./Suppli";
 import { ITypeValues } from "./Type";
-import { HasId, HasName } from "./common";
+import { HasId, HasName } from "./types";
 
 export type IMakerValues = Omit<Maker, "supplis">;
 export class Maker implements HasId, HasName {

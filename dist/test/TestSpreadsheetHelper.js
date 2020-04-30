@@ -47,11 +47,6 @@ exports.createTimingSheet = function (timings) {
 exports.createTypeSheet = function (types) {
     return __spreadArrays([["id", "name"]], types.map(function (type) { return [type.id, type.name]; }));
 };
-exports.createFormSheet = function (forms) {
-    return __spreadArrays([
-        ["id", "intakeId", "formId"]
-    ], forms.map(function (form) { return [form.id, form.intakeId, form.formId]; }));
-};
 exports.createIntakeDetailSheet = function (intakeDetails) {
     return __spreadArrays(intakeDetails.map(function (intakeDetail) { return [
         intakeDetail.date.toISOString(),

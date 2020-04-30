@@ -5,8 +5,7 @@ import {
   ISuppliValues,
   ISuppliAmountValues,
   ITimingValues,
-  ITypeValues,
-  IFormValues
+  ITypeValues
 } from "model/index";
 
 export class DummyDatastore implements Datastore {
@@ -30,9 +29,6 @@ export class DummyDatastore implements Datastore {
     return [];
   }
   fetchType(): ITypeValues[] {
-    return [];
-  }
-  fetchForm(): IFormValues[] {
     return [];
   }
   updateIntakes() {

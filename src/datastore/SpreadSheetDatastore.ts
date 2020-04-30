@@ -7,7 +7,6 @@ import {
   ISuppliAmountValues,
   ITimingValues,
   ITypeValues,
-  IFormValues,
   IIntakeDetailValues
 } from "../model";
 import { Spreadsheet } from "gas-lib";
@@ -58,9 +57,6 @@ export class SpreadSheetDatastore implements Datastore {
   }
   fetchType() {
     return this.fetch<ITypeValues>("type");
-  }
-  fetchForm() {
-    return this.fetch<IFormValues>("form");
   }
   private fetch<T>(sheetName: string) {
     if (!(sheetName in this.sheetValues)) {

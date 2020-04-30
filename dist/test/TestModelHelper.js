@@ -100,22 +100,6 @@ exports.createType = function (id, name, getSupplis, getIntakes) {
     if (getIntakes === void 0) { getIntakes = function () { return []; }; }
     return new index_1.Type(exports.createTypeValues(id, name), getSupplis, getIntakes);
 };
-exports.createFormValues = function (id, intakeId, formId) {
-    if (id === void 0) { id = 1; }
-    if (intakeId === void 0) { intakeId = 10; }
-    if (formId === void 0) { formId = "id"; }
-    return ({
-        id: id,
-        intakeId: intakeId,
-        formId: formId
-    });
-};
-exports.createForm = function (id, intakeId, formId) {
-    if (id === void 0) { id = 1; }
-    if (intakeId === void 0) { intakeId = 10; }
-    if (formId === void 0) { formId = "id"; }
-    return new index_1.Form(exports.createFormValues(id, intakeId, formId), function () { return undefined; });
-};
 exports.createIntakeDetailValues = function (date, timingId, suppliId, serving) {
     if (date === void 0) { date = new Date(); }
     if (timingId === void 0) { timingId = 1; }

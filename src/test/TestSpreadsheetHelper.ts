@@ -10,9 +10,7 @@ import {
   Timing,
   ITypeValues,
   ITimingValues,
-  IFormValues,
   Type,
-  Form,
   IntakeDetail,
   IIntakeDetailValues
 } from "model/index";
@@ -67,13 +65,6 @@ export const createTimingSheet = (timings: Array<Timing | ITimingValues>): IShee
 
 export const createTypeSheet = (types: Array<Type | ITypeValues>): ISheetValues => {
   return [["id", "name"], ...types.map<IRowValues>(type => [type.id, type.name])];
-};
-
-export const createFormSheet = (forms: Array<Form | IFormValues>) => {
-  return [
-    ["id", "intakeId", "formId"],
-    ...forms.map<IRowValues>(form => [form.id, form.intakeId, form.formId])
-  ];
 };
 
 export const createIntakeDetailSheet = (

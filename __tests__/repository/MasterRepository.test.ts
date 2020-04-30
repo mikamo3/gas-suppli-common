@@ -12,9 +12,7 @@ import {
   Suppli,
   SuppliAmount,
   Timing,
-  Type,
-  Form,
-  IFormValues
+  Type
 } from "model/index";
 import { MasterRepository } from "repository/index";
 import {
@@ -25,7 +23,6 @@ import {
   createTimingValues,
   createTypeValues,
   createIntake,
-  createFormValues,
   createIntakeDetailValues,
   createIntakeDetail
 } from "test/index";
@@ -40,7 +37,6 @@ jest.spyOn(DummyDatastore.prototype, "fetchIntake");
 jest.spyOn(DummyDatastore.prototype, "fetchSuppliAmount");
 jest.spyOn(DummyDatastore.prototype, "fetchMaker");
 jest.spyOn(DummyDatastore.prototype, "fetchTiming");
-jest.spyOn(DummyDatastore.prototype, "fetchForm");
 jest.spyOn(DummyDatastore.prototype, "updateIntakes");
 jest.spyOn(DummyDatastore.prototype, "addIntakeDetails");
 
@@ -288,11 +284,14 @@ describe("getMakerByName", () => {
   let name: string;
   let actual: Maker;
   let fetchMakerReturnValue: IMakerValues[];
+  let fetchSuppliReturnValue: ISuppliValues[];
   beforeAll(() => {
     fetchMakerReturnValue = [createMakerValues(1, "maker1"), createMakerValues(2, "maker2")];
+    fetchSuppliReturnValue = [];
   });
   beforeEach(() => {
     mocked(DummyDatastore.prototype.fetchMaker).mockReturnValue(fetchMakerReturnValue);
+    mocked(DummyDatastore.prototype.fetchSuppli).mockReturnValue(fetchSuppliReturnValue);
     actual = masterRepository.getMakerByName(name);
   });
   describe("nameと等しいMakerが存在する場合", () => {
@@ -301,6 +300,18 @@ describe("getMakerByName", () => {
     });
     it("指定したTimingが返却されること", () => {
       expect(actual.name).toEqual(name);
+    });
+    describe("紐づくsuppliが存在する場合", () => {
+      beforeAll(() => {
+        fetchSuppliReturnValue = [
+          createSuppliValues(10, 100, 1, "suppli1"),
+          createSuppliValues(11, 101, 2, "suppli2")
+        ];
+      });
+      it("maker.supplisで紐づくsuppliが取得できること", () => {
+        expect(actual.supplis).toHaveLength(1);
+        expect(actual.supplis[0].id).toEqual(11);
+      });
     });
   });
   describe("nameと等しいTimingが存在しない場合", () => {
@@ -504,52 +515,6 @@ describe("getIntakes", () => {
       });
       it("Timingが存在しない場合はundefinedが返却されること", () => {
         expect(actual[0].type).toBeUndefined();
-      });
-    });
-  });
-});
-
-describe("getForms", () => {
-  let actual: Form[];
-  let fetchFormRV: IFormValues[];
-  let fetchIntakeRV: IIntakeValues[];
-  beforeAll(() => {
-    fetchFormRV = [];
-    fetchIntakeRV = [];
-  });
-  beforeEach(() => {
-    mocked(DummyDatastore.prototype.fetchForm).mockReturnValue(fetchFormRV);
-    mocked(DummyDatastore.prototype.fetchIntake).mockReturnValue(fetchIntakeRV);
-    actual = masterRepository.getForms();
-  });
-  describe("存在する場合", () => {
-    beforeAll(() => {
-      fetchFormRV = [createFormValues(), createFormValues()];
-    });
-    it("Formが件数分返却されること", () => {
-      expect(actual).toHaveLength(2);
-    });
-  });
-  describe("存在しない場合", () => {
-    beforeAll(() => {
-      fetchFormRV = [];
-    });
-    it("空配列が返却されること", () => {
-      expect(actual).toEqual([]);
-    });
-  });
-  describe("relationの確認", () => {
-    beforeAll(() => {
-      fetchFormRV = [createFormValues(1, 101), createFormValues(2, 102), createFormValues(3, 103)];
-      fetchIntakeRV = [createIntakeValues(102), createIntakeValues(103)];
-    });
-    describe("intake", () => {
-      it("Intakeが存在する場合はそれが返却されること", () => {
-        expect(actual[1].intake.id).toEqual(102);
-        expect(actual[2].intake.id).toEqual(103);
-      });
-      it("Intakeが存在しない場合はundefinedが返却されること", () => {
-        expect(actual[0].intake).toBeUndefined();
       });
     });
   });

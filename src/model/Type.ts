@@ -1,6 +1,6 @@
 import { Suppli } from "./Suppli";
 import { Intake } from "./Intake";
-import { HasId, HasName } from "./common";
+import { HasId, HasName } from "./types";
 
 export type ITypeValues = Omit<Type, "supplis" | "intakes">;
 export class Type implements HasId, HasName {

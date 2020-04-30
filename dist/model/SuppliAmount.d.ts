@@ -1,5 +1,5 @@
 import { Suppli } from "./Suppli";
-import { HasId } from "./common";
+import { HasId } from "./types";
 export declare type ISuppliAmountValues = Omit<SuppliAmount, "suppli">;
 export declare class SuppliAmount implements HasId {
     id: number;

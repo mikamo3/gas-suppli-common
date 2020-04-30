@@ -2,101 +2,92 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var underscore_1 = require("underscore");
 var index_1 = require("../model/index");
+var relation_1 = require("../model/relation");
 var MasterRepository = /** @class */ (function () {
     function MasterRepository(datastore) {
         this.datastore = datastore;
     }
     MasterRepository.prototype.getTypes = function () {
         var _this = this;
-        var types = this.datastore.fetchType();
-        return types.map(function (t) { return _this.createType(t); });
+        return this.datastore.fetchType().map(function (t) { return relation_1.createType(t, _this); });
     };
     MasterRepository.prototype.getTypeById = function (id) {
-        var types = this.datastore.fetchType();
-        return this.getById(id, types, this.createType);
+        var type = this.getFirstBy("id", id, this.datastore.fetchType());
+        return type ? relation_1.createType(type, this) : undefined;
     };
     MasterRepository.prototype.getSupplis = function () {
         var _this = this;
-        var supplis = this.datastore.fetchSuppli();
-        return supplis.map(function (s) { return _this.createSuppli(s); });
+        return this.datastore.fetchSuppli().map(function (s) { return relation_1.createSuppli(s, _this); });
     };
     MasterRepository.prototype.getSuppliById = function (id) {
-        var supplis = this.datastore.fetchSuppli();
-        return this.getById(id, supplis, this.createSuppli);
+        var suppli = this.getFirstBy("id", id, this.datastore.fetchSuppli());
+        return suppli ? relation_1.createSuppli(suppli, this) : undefined;
     };
     MasterRepository.prototype.getSupplisByTypeId = function (typeId) {
         var _this = this;
-        var supplis = this.datastore.fetchSuppli();
-        var fSupplis = underscore_1.filter(supplis, function (s) { return s.typeId === typeId; });
-        return fSupplis.map(function (fs) { return _this.createSuppli(fs); });
+        return this.getBy("typeId", typeId, this.datastore.fetchSuppli()).map(function (fs) {
+            return relation_1.createSuppli(fs, _this);
+        });
     };
     MasterRepository.prototype.getSupplisByMakerId = function (makerId) {
         var _this = this;
-        var supplis = this.datastore.fetchSuppli();
-        var fSupplis = underscore_1.filter(supplis, function (s) { return s.makerId === makerId; });
-        return fSupplis.map(function (fs) { return _this.createSuppli(fs); });
+        return this.getBy("makerId", makerId, this.datastore.fetchSuppli()).map(function (fs) {
+            return relation_1.createSuppli(fs, _this);
+        });
     };
     MasterRepository.prototype.getMakers = function () {
         var _this = this;
-        var makers = this.datastore.fetchMaker();
-        return makers.map(function (m) { return _this.createMaker(m); });
+        return this.datastore.fetchMaker().map(function (m) { return relation_1.createMaker(m, _this); });
     };
     MasterRepository.prototype.getMakerById = function (id) {
-        var makers = this.datastore.fetchMaker();
-        return this.getById(id, makers, this.createMaker);
+        var maker = this.getFirstBy("id", id, this.datastore.fetchMaker());
+        return maker ? relation_1.createMaker(maker, this) : undefined;
     };
     MasterRepository.prototype.getMakerByName = function (name) {
-        var makers = this.datastore.fetchMaker();
-        return this.getByName(name, makers, this.createMaker);
+        var maker = this.getFirstBy("name", name, this.datastore.fetchMaker());
+        return maker ? relation_1.createMaker(maker, this) : undefined;
     };
     MasterRepository.prototype.getSuppliAmounts = function () {
         var _this = this;
-        var suppliAmounts = this.datastore.fetchSuppliAmount();
-        return suppliAmounts.map(function (sa) { return _this.createSuppliAmounts(sa); });
+        return this.datastore
+            .fetchSuppliAmount()
+            .map(function (sa) { return relation_1.createSuppliAmounts(sa, _this); });
     };
     MasterRepository.prototype.getSuppliAmountsBySuppliId = function (suppliId) {
         var _this = this;
-        var suppliAmounts = this.datastore.fetchSuppliAmount();
-        return underscore_1.filter(suppliAmounts, function (sa) { return sa.suppliId === suppliId; }).map(function (sa) {
-            return _this.createSuppliAmounts(sa);
-        });
+        return this.getBy("suppliId", suppliId, this.datastore.fetchSuppliAmount()).map(function (sa) { return relation_1.createSuppliAmounts(sa, _this); });
     };
     MasterRepository.prototype.getTimings = function () {
         var _this = this;
-        var timings = this.datastore.fetchTiming();
-        return timings.map(function (t) { return _this.createTiming(t); });
+        return this.datastore.fetchTiming().map(function (t) { return relation_1.createTiming(t, _this); });
     };
     MasterRepository.prototype.getTimingById = function (id) {
-        var timings = this.datastore.fetchTiming();
-        return this.getById(id, timings, this.createTiming);
+        var timing = this.getFirstBy("id", id, this.datastore.fetchTiming());
+        return timing ? relation_1.createTiming(timing, this) : undefined;
     };
     MasterRepository.prototype.getTimingByName = function (name) {
-        var timings = this.datastore.fetchTiming();
-        return this.getByName(name, timings, this.createTiming);
+        var timing = this.getFirstBy("name", name, this.datastore.fetchTiming());
+        return timing ? relation_1.createTiming(timing, this) : undefined;
     };
     MasterRepository.prototype.getIntakes = function () {
         var _this = this;
-        var intakes = this.datastore.fetchIntake();
-        return intakes.map(function (i) { return _this.createIntake(i); });
+        return this.datastore.fetchIntake().map(function (i) { return relation_1.createIntake(i, _this); });
     };
     MasterRepository.prototype.getIntakeById = function (id) {
-        var intakes = this.datastore.fetchIntake();
-        return this.getById(id, intakes, this.createIntake);
+        var intake = this.getFirstBy("id", id, this.datastore.fetchIntake());
+        return intake ? relation_1.createIntake(intake, this) : undefined;
     };
     MasterRepository.prototype.getIntakesByTypeId = function (typeId) {
         var _this = this;
-        var intakes = this.datastore.fetchIntake();
-        return underscore_1.filter(intakes, function (i) { return i.typeId === typeId; }).map(function (i) { return _this.createIntake(i); });
+        return this.getBy("typeId", typeId, this.datastore.fetchIntake()).map(function (i) {
+            return relation_1.createIntake(i, _this);
+        });
     };
     MasterRepository.prototype.getIntakesByTimingId = function (timingId) {
         var _this = this;
-        var intakes = this.datastore.fetchIntake();
-        return underscore_1.filter(intakes, function (i) { return i.timingId === timingId; }).map(function (i) { return _this.createIntake(i); });
-    };
-    MasterRepository.prototype.getForms = function () {
-        var _this = this;
-        var forms = this.datastore.fetchForm();
-        return forms.map(function (f) { return _this.createForm(f); });
+        return this.getBy("timingId", timingId, this.datastore.fetchIntake()).map(function (i) {
+            return relation_1.createIntake(i, _this);
+        });
     };
     MasterRepository.prototype.updateIntakes = function (intakes) {
         var intakeValues = intakes.map(function (i) {
@@ -126,47 +117,11 @@ var MasterRepository = /** @class */ (function () {
         });
         this.datastore.addIntakeDetails(intakeDetailValues);
     };
-    MasterRepository.prototype.createType = function (type) {
-        var _this = this;
-        return new index_1.Type(type, function () { return _this.getSupplisByTypeId(type.id); }, function () { return _this.getIntakesByTypeId(type.id); });
+    MasterRepository.prototype.getFirstBy = function (key, search, data) {
+        return underscore_1.find(data, function (d) { return d[key] === search; });
     };
-    MasterRepository.prototype.createSuppli = function (suppli) {
-        var _this = this;
-        return new index_1.Suppli(suppli, function () { return _this.getTypeById(suppli.typeId); }, function () { return _this.getMakerById(suppli.makerId); }, function () { return _this.getSuppliAmountsBySuppliId(suppli.id); });
-    };
-    MasterRepository.prototype.createMaker = function (maker) {
-        var _this = this;
-        return new index_1.Maker(maker, function () { return _this.getSupplisByMakerId(maker.id); });
-    };
-    MasterRepository.prototype.createSuppliAmounts = function (suppliAmount) {
-        var _this = this;
-        return new index_1.SuppliAmount(suppliAmount, function () { return _this.getSuppliById(suppliAmount.suppliId); });
-    };
-    MasterRepository.prototype.createTiming = function (timing) {
-        var _this = this;
-        return new index_1.Timing(timing, function () { return _this.getIntakesByTimingId(timing.id); });
-    };
-    MasterRepository.prototype.createIntake = function (intake) {
-        var _this = this;
-        return new index_1.Intake(intake, function () { return _this.getTimingById(intake.timingId); }, function () { return _this.getTypeById(intake.typeId); });
-    };
-    MasterRepository.prototype.createForm = function (form) {
-        var _this = this;
-        return new index_1.Form(form, function () { return _this.getIntakeById(form.intakeId); });
-    };
-    MasterRepository.prototype.getById = function (id, data, create) {
-        var findData = underscore_1.find(data, function (d) { return d.id === id; });
-        if (findData) {
-            return create(findData);
-        }
-        return undefined;
-    };
-    MasterRepository.prototype.getByName = function (name, data, create) {
-        var findData = underscore_1.find(data, function (d) { return d.name === name; });
-        if (findData) {
-            return create(findData);
-        }
-        return undefined;
+    MasterRepository.prototype.getBy = function (key, search, data) {
+        return underscore_1.filter(data, function (d) { return d[key] === search; });
     };
     return MasterRepository;
 }());
