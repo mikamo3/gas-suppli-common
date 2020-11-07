@@ -1,5 +1,5 @@
 import { SpreadSheetDatastore } from "datastore/index";
-import { Spreadsheet } from "gas-lib";
+import { Spreadsheet } from "gas-lib/Spreadsheet";
 import { IIntakeValues } from "model/index";
 import { advanceTo } from "jest-date-mock";
 import { mocked } from "ts-jest/utils";
@@ -21,7 +21,7 @@ import {
 } from "test/index";
 import { IIntakeDetailValues } from "model/IntakeDetail";
 
-jest.mock("gas-lib");
+jest.mock("gas-lib/Spreadsheet");
 
 let getAllValuesRV: Array<Array<string | number>>;
 let spreadSheetDatastore: SpreadSheetDatastore;

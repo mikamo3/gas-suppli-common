@@ -2,7 +2,7 @@ import testMasterdata from "./test/testMasterdata";
 import testRelationType from "./test/testRelationType";
 import testUpdateIntakes from "./test/testUpdateIntakes";
 import { PropertyNames } from "constant/index";
-import { TestSpreadsheetHelper } from "gas-lib";
+import { TestSpreadsheetHelper } from "gas-lib/test";
 import testAddIntakeDetails from "./test/testAddIntakeDetails";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

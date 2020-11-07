@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var underscore_1 = require("underscore");
-var gas_lib_1 = require("gas-lib");
+var Spreadsheet_1 = require("gas-lib/Spreadsheet");
+var index_1 = require("../env/index");
 var intakeColumnPosition = {
     id: 0,
     timingId: 1,
@@ -20,7 +21,7 @@ var SpreadSheetDatastore = /** @class */ (function () {
         if (!configure.spreadSheetId) {
             throw Error("configure.spreadSheetId does not found");
         }
-        this.spreadSheet = gas_lib_1.Spreadsheet.openById(configure.spreadSheetId);
+        this.spreadSheet = Spreadsheet_1.Spreadsheet.openById(configure.spreadSheetId);
     }
     SpreadSheetDatastore.prototype.fetchMaker = function () {
         return this.fetch("maker");
@@ -42,6 +43,7 @@ var SpreadSheetDatastore = /** @class */ (function () {
     };
     SpreadSheetDatastore.prototype.fetch = function (sheetName) {
         if (!(sheetName in this.sheetValues)) {
+            index_1.logger().debug("fetch data");
             var sheetValues = this.spreadSheet.getAllValues(sheetName);
             this.sheetValues[sheetName] = sheetValues;
         }
@@ -49,7 +51,10 @@ var SpreadSheetDatastore = /** @class */ (function () {
             return [];
         }
         var dataPosition = this.getDataPosition(this.sheetValues[sheetName]);
-        return this.convertModelValues(dataPosition, this.sheetValues[sheetName]);
+        var values = this.convertModelValues(dataPosition, this.sheetValues[sheetName]);
+        index_1.logger().debug("values:");
+        index_1.logger().debug(values);
+        return values;
     };
     SpreadSheetDatastore.prototype.getDataPosition = function (sheetValues) {
         var header = sheetValues[0];

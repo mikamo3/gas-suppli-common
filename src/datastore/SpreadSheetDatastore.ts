@@ -9,7 +9,8 @@ import {
   ITypeValues,
   IIntakeDetailValues
 } from "../model";
-import { Spreadsheet } from "gas-lib";
+import { Spreadsheet } from "gas-lib/Spreadsheet";
+import { logger } from "env/index";
 type IColumPosition = { [s: string]: number };
 export type IRowValues = Array<string | number>;
 export type IHeaderColums = Array<string>;
@@ -60,6 +61,7 @@ export class SpreadSheetDatastore implements Datastore {
   }
   private fetch<T>(sheetName: string) {
     if (!(sheetName in this.sheetValues)) {
+      logger().debug("fetch data");
       const sheetValues = this.spreadSheet.getAllValues(sheetName) as ISheetValues;
       this.sheetValues[sheetName] = sheetValues;
     }
@@ -67,7 +69,10 @@ export class SpreadSheetDatastore implements Datastore {
       return [];
     }
     const dataPosition = this.getDataPosition(this.sheetValues[sheetName]);
-    return this.convertModelValues<T>(dataPosition, this.sheetValues[sheetName]);
+    const values = this.convertModelValues<T>(dataPosition, this.sheetValues[sheetName]);
+    logger().debug("values:");
+    logger().debug(values);
+    return values;
   }
   private getDataPosition(sheetValues: ISheetValues): IColumPosition {
     const header = sheetValues[0] as IHeaderColums;
