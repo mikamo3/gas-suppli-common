@@ -20,7 +20,7 @@
   "dependencies": {
     "@types/underscore": "^1.9.4",
     "gas-lib": "../node_modules/gas-lib",
-    "underscore": "^1.10.2"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
     "@google/clasp": "^2.3.0",
